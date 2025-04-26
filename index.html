@@ -3,15 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Fall Detection</title>
+  <style>
+    img {
+      width: 640px;
+      height: 480px;
+      border: 2px solid black;
+    }
+  </style>
 </head>
 <body>
   <h1>Fall Detection System</h1>
   <p>Status: <span id="status">Waiting...</span></p>
 
-  <!-- Video feed from the Flask server -->
+  <!-- Flask Video Feed -->
   <h2>Live Video Feed:</h2>
-  <img src="http://falldetection.me" alt="Live Video Feed" />
+  <img src="https://falldetection.me/video" alt="Live Fall Detection Feed" />
 
-  <script src="index.js"></script>
+  <script>
+    document.getElementById("status").textContent = "Streaming from Flask server";
+  </script>
 </body>
 </html>
