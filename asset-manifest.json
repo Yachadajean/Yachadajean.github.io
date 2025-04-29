@@ -2,6 +2,8 @@
   "files": {
     "main.js": "/static/js/main.badd052c.js",
     "index.html": "/index.html",
+    "serve.json": "/serve.json",
+    "manifest.json": "/manifest.json",
     "main.badd052c.js.map": "/static/js/main.badd052c.js.map"
   },
   "entrypoints": [
