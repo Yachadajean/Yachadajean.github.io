@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fall Detection</title>
+  <style>
+    img {
+      width: 640px;
+      height: 480px;
+      border: 2px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fall Detection System</h1>
+  <p>Status: <span id="status">Waiting...</span></p>
+
+  <script>
+    fetch('/status')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("status").textContent = data.status;
+      })
+      .catch(err => {
+        document.getElementById("status").textContent = "Backend unreachable";
+        console.error(err);
+      });
+  </script>
+  
+  <!-- Flask Video Feed -->
+  <h2>Live Video Feed:</h2>
+  <img src="/video_feed" alt="Live Fall Detection Feed" />
+
+
+  <script>
+    document.getElementById("status").textContent = "Streaming from Flask server";
+  </script>
+</body>
+</html>
+
+@app.route('/')
+def index():
+    return {"message": "Backend API is live. Please use the frontend at https://myfriend.github.io/fall-detection-frontend/"}
