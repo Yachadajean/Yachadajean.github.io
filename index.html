@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fall Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    img {
+      width: 640px;
+      height: 480px;
+      border: 2px solid black;
+      margin-top: 1rem;
+    }
+    .status {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>1212312121Fall Detection System</h1>
+  <p class="status">Status: <span id="status">Loading...</span></p>
+
+  <h2>Live Video Feed:</h2>
+  <img id="video" src="https://falldetection.me/video_feed" alt="Live Fall Detection Feed" />
+
+  <script>
+    const statusEl = document.getElementById("status");
+
+    fetch("https://falldetection.me/status")
+      .then((res) => res.json())
+      .then((data) => {
+        statusEl.textContent = data.status;
+      })
+      .catch((err) => {
+        statusEl.textContent = "Backend unreachable";
+        console.error("Status fetch failed:", err);
+      });
+  </script>
+</body>
+</html>
