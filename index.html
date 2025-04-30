@@ -16,7 +16,7 @@
   <p>Status: <span id="status">Waiting...</span></p>
 
   <script>
-    fetch('/status')
+    fetch('https://api.falldetection.me/status')
       .then(res => res.json())
       .then(data => {
         document.getElementById("status").textContent = data.status;
@@ -29,7 +29,7 @@
   
   <!-- Flask Video Feed -->
   <h2>Live Video Feed:</h2>
-  <img src="/video_feed" alt="Live Fall Detection Feed" />
+  <img src="https://api.falldetection.me/video_feed" alt="Live Fall Detection Feed" />
 
 
   <script>
