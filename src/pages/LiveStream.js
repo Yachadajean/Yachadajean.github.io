@@ -11,7 +11,7 @@ const LiveStream = () => {
   const hlsRef = useRef(null);
   const navigate = useNavigate(); // Navigation
 
-  // Cleanup HLS instance
+  // Cleanup HLS instance on component unmount
   useEffect(() => {
     return () => {
       if (hlsRef.current) {
@@ -25,6 +25,12 @@ const LiveStream = () => {
       setError('No IP address or domain provided');
       return;
     }
+
+    // Backend URL for streaming video from the camera
+    // This is the format you can test from backend:
+    // http://localhost:3000/stream/134.208.3.240
+    // The IP address '134.208.3.240' is used by backend to locate the camera
+    // However, for video player we use HLS .m3u8 stream instead
 
     let streamUrl;
     try {
