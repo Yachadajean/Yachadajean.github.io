@@ -1,0 +1,189 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 2rem;
+    background-color: white;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+  
+  .gif {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 1.5rem;
+  }
+  
+  .text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2rem;
+  }
+  
+  button {
+    padding: 0.75rem 2rem;
+    background-color: #4a6fa5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #3a5e90;
+  }
+  
+  .skip {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    font-size: 1rem;
+  }
+  
+  .split-screen-container {
+    width: 100%;
+    height: 100vh;
+  }
+  
+  .split-screen {
+    display: flex;
+    height: 100%;
+  }
+  
+  .left-panel {
+    flex: 1;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .image-container {
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .panel-image {
+    width: 90%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+  }
+  
+  .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* Add this */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    background-color: white;
+    padding: 20px; /* Add some padding */
+  }
+  
+  .auth-form {
+    width: 100%;
+    max-width: 550px; /* Control form width */
+    padding: 20px;
+  }
+  
+  .auth-form h2 {
+    margin-bottom: 40px;
+    font-size: 50px;
+    color: #333;
+    text-align: left;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    position: relative;
+    width: 100%;
+  }
+  
+  .auth-input {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  
+  
+  .password-toggle {
+    position: absolute;
+    right: -35px;
+    top: 55%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 20px;
+  }
+  
+  .remember-me {
+    display: flex;
+    align-items: center;
+    margin: 15px 0 25px;
+  }
+  
+  .remember-me input {
+    margin-right: 8px;
+  }
+  
+  .remember-me label {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .auth-button {
+    width: 100%;
+    max-width: 350px; /* Set a max-width */
+    padding: 14px; /* Add missing px value */
+    margin: 0 auto; /* Center horizontally within form */
+    display: block; /* Needed for margin auto to work */
+    background-color: #4a6fa5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .auth-button:hover {
+    background-color: #3a5a80;
+  }
+
+  .create-account-container {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .create-account-container p {
+    color: #666;
+    font-size: 16px;
+  }
+  
+  .create-account-container span {
+    color: #4a6fa5;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .create-account-container span:hover {
+    text-decoration: underline;
+  }
+
+  
