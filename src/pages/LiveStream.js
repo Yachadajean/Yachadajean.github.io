@@ -141,15 +141,17 @@ const LiveStream = () => {
 
       {videoUrl ? (
         <>
+          {/* Use the static URL here for testing */}
           <video
-            ref={videoRef}
             controls
             autoPlay
             playsInline
-            style={{ width: '100%', height: '90%' }}
+            src="http://134.208.3.240/video_feed" // Make sure the URL is correct
+            style={{ width: '100%', height: 'auto' }}
           >
             Your browser does not support the video tag.
           </video>
+
           <div style={{ textAlign: 'center', padding: '10px' }}>
             <button
               onClick={captureAndSendFrame}
@@ -160,7 +162,7 @@ const LiveStream = () => {
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Send Frame to Detect
