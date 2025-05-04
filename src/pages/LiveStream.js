@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Hls from 'hls.js';
-import { FaCalendarAlt, FaCog } from 'react-icons/fa';
-import FirebasePushSetup from './FirebasePushSetup'; // <-- Push setup
+import { FaCalendarAlt, FaCog } from 'react-icons/fa'; // Import icons
 
 const LiveStream = () => {
   const { ipAddress: paramIpAddress } = useParams();
@@ -10,8 +9,9 @@ const LiveStream = () => {
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Navigation
 
+  // Cleanup HLS instance on component unmount
   useEffect(() => {
     return () => {
       if (hlsRef.current) {
@@ -26,6 +26,12 @@ const LiveStream = () => {
       return;
     }
 
+    // Backend URL for streaming video from the camera
+    // This is the format you can test from backend:
+    // http://localhost:3000/stream/134.208.3.240
+    // The IP address '134.208.3.240' is used by backend to locate the camera
+    // However, for video player we use HLS .m3u8 stream instead
+
     let streamUrl;
     try {
       const isIp = /^\d{1,3}(\.\d{1,3}){3}$/.test(paramIpAddress);
@@ -38,6 +44,7 @@ const LiveStream = () => {
       if (Hls.isSupported()) {
         const hls = new Hls();
         hlsRef.current = hls;
+
         hls.loadSource(streamUrl);
         hls.attachMedia(videoRef.current);
 
@@ -95,13 +102,10 @@ const LiveStream = () => {
 
       const base64ImageData = canvas.toDataURL('image/jpeg');
 
-      fetch('/detect', {
+      fetch('http://134.208.3.240:5000/detect', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          image: base64ImageData,
-          token: localStorage.getItem('fcmToken'),
-        }),
+        body: JSON.stringify({ image: base64ImageData }),
       })
         .then(res => res.json())
         .then(data => console.log('Detection result:', data))
@@ -113,8 +117,6 @@ const LiveStream = () => {
 
   return (
     <div style={{ backgroundColor: '#000', height: '100vh', position: 'relative' }}>
-      <FirebasePushSetup /> {/* 🔔 Firebase Push Notification setup */}
-
       {/* Top right icons */}
       <div style={{ position: 'absolute', top: 15, right: 20, display: 'flex', gap: 20, zIndex: 10 }}>
         <button
@@ -139,17 +141,17 @@ const LiveStream = () => {
         </div>
       )}
 
-      <video
-        controls
-        autoPlay
-        playsInline
-        src="https://falldetection.me/video_feed"
-        style={{ width: '100%', height: 'auto' }}
-      >
-        Your browser does not support the video tag.
-      </video>
-
-
+      {videoUrl ? (
+        <>
+          <video
+            ref={videoRef}
+            controls
+            autoPlay
+            playsInline
+            style={{ width: '100%', height: '90%' }}
+          >
+            Your browser does not support the video tag.
+          </video>
           <div style={{ textAlign: 'center', padding: '10px' }}>
             <button
               onClick={captureAndSendFrame}
@@ -160,7 +162,7 @@ const LiveStream = () => {
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
-                cursor: 'pointer',
+                cursor: 'pointer'
               }}
             >
               Send Frame to Detect
