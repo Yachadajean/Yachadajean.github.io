@@ -100,7 +100,7 @@ const LiveStream = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           image: base64ImageData,
-          token: 'YOUR_FIREBASE_DEVICE_TOKEN' // <-- Replace with real token if available
+          token: localStorage.getItem('fcmToken'),
         }),
       })
         .then(res => res.json())
