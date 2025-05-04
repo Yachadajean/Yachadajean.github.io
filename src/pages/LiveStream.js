@@ -139,18 +139,16 @@ const LiveStream = () => {
         </div>
       )}
 
-      {videoUrl ? (
-        <>
-          {/* Use the static URL here for testing */}
-          <video
-            controls
-            autoPlay
-            playsInline
-            src="http://134.208.3.240/video_feed" // Make sure the URL is correct
-            style={{ width: '100%', height: 'auto' }}
-          >
-            Your browser does not support the video tag.
-          </video>
+      <video
+        controls
+        autoPlay
+        playsInline
+        src="https://falldetection.me/video_feed"
+        style={{ width: '100%', height: 'auto' }}
+      >
+        Your browser does not support the video tag.
+      </video>
+
 
           <div style={{ textAlign: 'center', padding: '10px' }}>
             <button
