@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Hls from 'hls.js';
-import { FaCalendarAlt, FaCog } from 'react-icons/fa'; // Import icons
+import { FaCalendarAlt, FaCog } from 'react-icons/fa';
+import FirebasePushSetup from './FirebasePushSetup'; // <-- Push setup
 
 const LiveStream = () => {
   const { ipAddress: paramIpAddress } = useParams();
@@ -9,9 +10,8 @@ const LiveStream = () => {
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
-  const navigate = useNavigate(); // Navigation
+  const navigate = useNavigate();
 
-  // Cleanup HLS instance on component unmount
   useEffect(() => {
     return () => {
       if (hlsRef.current) {
@@ -26,12 +26,6 @@ const LiveStream = () => {
       return;
     }
 
-    // Backend URL for streaming video from the camera
-    // This is the format you can test from backend:
-    // http://localhost:3000/stream/134.208.3.240
-    // The IP address '134.208.3.240' is used by backend to locate the camera
-    // However, for video player we use HLS .m3u8 stream instead
-
     let streamUrl;
     try {
       const isIp = /^\d{1,3}(\.\d{1,3}){3}$/.test(paramIpAddress);
@@ -44,7 +38,6 @@ const LiveStream = () => {
       if (Hls.isSupported()) {
         const hls = new Hls();
         hlsRef.current = hls;
-
         hls.loadSource(streamUrl);
         hls.attachMedia(videoRef.current);
 
@@ -103,13 +96,13 @@ const LiveStream = () => {
       const base64ImageData = canvas.toDataURL('image/jpeg');
 
       fetch('/detect', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    image: base64ImageData,
-    token: 'YOUR_FIREBASE_DEVICE_TOKEN' // Optional: Replace with real token
-  }),
-})
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          image: base64ImageData,
+          token: 'YOUR_FIREBASE_DEVICE_TOKEN' // <-- Replace with real token if available
+        }),
+      })
         .then(res => res.json())
         .then(data => console.log('Detection result:', data))
         .catch(err => console.error('Error sending image:', err));
@@ -120,6 +113,8 @@ const LiveStream = () => {
 
   return (
     <div style={{ backgroundColor: '#000', height: '100vh', position: 'relative' }}>
+      <FirebasePushSetup /> {/* 🔔 Firebase Push Notification setup */}
+
       {/* Top right icons */}
       <div style={{ position: 'absolute', top: 15, right: 20, display: 'flex', gap: 20, zIndex: 10 }}>
         <button
