@@ -102,7 +102,7 @@ const LiveStream = () => {
 
       const base64ImageData = canvas.toDataURL('image/jpeg');
 
-      fetch('http://134.208.3.240:5000/detect', {
+      fetch('/detect', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: base64ImageData }),
