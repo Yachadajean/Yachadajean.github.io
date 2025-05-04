@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { messaging } from '../firebase-config'; // Adjust path if needed
+import { messaging } from 'src/firebase-config'; // Adjust path if needed
 import { getToken } from 'firebase/messaging';
 
 const FirebasePushSetup = () => {
