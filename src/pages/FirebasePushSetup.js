@@ -9,7 +9,7 @@ const FirebasePushSetup = () => {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
           const token = await getToken(messaging, {
-            vapidKey: 'YOUR_PUBLIC_VAPID_KEY', // Replace with your Firebase VAPID key
+            vapidKey: 'BKDr9lAqH-s2eMkTkUJMis7LLxZWqHkXNveZrPM3wg6N400X9Pt4iCw2Bx1lWTcSPN4a7O8MASH8P0FQ2H4CNjk', // Replace with your Firebase VAPID key
           });
           console.log('📱 Firebase device token:', token);
           // TODO: send `token` to your backend or store locally
