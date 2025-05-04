@@ -103,10 +103,13 @@ const LiveStream = () => {
       const base64ImageData = canvas.toDataURL('image/jpeg');
 
       fetch('/detect', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64ImageData }),
-      })
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    image: base64ImageData,
+    token: 'YOUR_FIREBASE_DEVICE_TOKEN' // Optional: Replace with real token
+  }),
+})
         .then(res => res.json())
         .then(data => console.log('Detection result:', data))
         .catch(err => console.error('Error sending image:', err));
