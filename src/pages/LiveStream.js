@@ -12,23 +12,15 @@ const LiveStream = () => {
   const hlsRef = useRef(null);
   const navigate = useNavigate();
 
-  // Cleanup HLS instance on component unmount
-  useEffect(() => {
-    return () => {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-      }
-    };
-  }, []);
-
   // Fetch fall detection status
   useEffect(() => {
     const checkFallStatus = async () => {
       try {
         const res = await fetch('https://falldetection.me/status');
+        if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
         const data = await res.json();
         console.log('Status:', data);
-        if (data.fall_detected) {
+        if (data.status === "Camera online") {
           setFallDetected(true);
         } else {
           setFallDetected(false);
@@ -44,6 +36,7 @@ const LiveStream = () => {
     return () => clearInterval(intervalId); // Clean up the interval on unmount
   }, []);
 
+  // Fetch video stream URL
   useEffect(() => {
     if (!paramIpAddress) {
       setError('No IP address or domain provided');
@@ -160,9 +153,12 @@ const LiveStream = () => {
         <div style={styles.frameWrapper}>
           <div style={styles.videoFrame}>
             <div style={styles.innerVideoContainer}>
-              <video ref={videoRef} controls autoPlay playsInline poster="/placeholder.png" style={styles.video}>
-                Your browser does not support the video tag.
-              </video>
+            <img
+              src="https://api.falldetection.me/video_feed"
+              alt="Live video stream"
+              style={styles.video}
+            />
+
             </div>
           </div>
         </div>
