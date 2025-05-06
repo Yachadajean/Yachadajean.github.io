@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     // ✅ Check connection status
-    fetch('https://falldetection.me/status')
+    fetch('https://falldetection.me/status')  // Remove the '/api' part if it's not needed
       .then(res => res.json())
       .then(data => {
         console.log('API response:', data);
