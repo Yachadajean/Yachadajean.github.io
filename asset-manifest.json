@@ -1,12 +1,15 @@
 {
   "files": {
-    "main.js": "/static/js/main.badd052c.js",
-    "index.html": "/index.html",
-    "serve.json": "/serve.json",
-    "manifest.json": "/manifest.json",
-    "main.badd052c.js.map": "/static/js/main.badd052c.js.map"
+    "main.css": "/fall-detection-ui/static/css/main.d7f7fc33.css",
+    "main.js": "/fall-detection-ui/static/js/main.bd827cbb.js",
+    "static/js/453.039bb41f.chunk.js": "/fall-detection-ui/static/js/453.039bb41f.chunk.js",
+    "index.html": "/fall-detection-ui/index.html",
+    "main.d7f7fc33.css.map": "/fall-detection-ui/static/css/main.d7f7fc33.css.map",
+    "main.bd827cbb.js.map": "/fall-detection-ui/static/js/main.bd827cbb.js.map",
+    "453.039bb41f.chunk.js.map": "/fall-detection-ui/static/js/453.039bb41f.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.badd052c.js"
+    "static/css/main.d7f7fc33.css",
+    "static/js/main.bd827cbb.js"
   ]
 }
