@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     // ✅ Use relative URL for development proxy
-    fetch('/api/status')
+    fetch('/status')
       .then(res => res.json())
       .then(data => {
         console.log('API response:', data);
