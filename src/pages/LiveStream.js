@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Hls from 'hls.js';
-import { FaCalendarAlt, FaUser, FaFolderOpen  } from 'react-icons/fa';
+import { FaCalendarAlt, FaUser, FaFolderOpen } from 'react-icons/fa';
 
 const LiveStream = () => {
   const { ipAddress: paramIpAddress } = useParams();
   const [videoUrl, setVideoUrl] = useState(null);
   const [error, setError] = useState(null);
+  const [fallDetected, setFallDetected] = useState(false);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
   const navigate = useNavigate();
@@ -18,6 +19,30 @@ const LiveStream = () => {
         hlsRef.current.destroy();
       }
     };
+  }, []);
+
+  // Fetch fall detection status
+  useEffect(() => {
+    const checkFallStatus = async () => {
+      try {
+        const res = await fetch('https://falldetection.me/status');
+        const data = await res.json();
+        console.log('Status:', data);
+        if (data.fall_detected) {
+          setFallDetected(true);
+          // Trigger logic to record or notify
+        } else {
+          setFallDetected(false);
+        }
+      } catch (err) {
+        console.error('Error fetching fall status:', err);
+      }
+    };
+
+    checkFallStatus(); // Initial check
+    const intervalId = setInterval(checkFallStatus, 3000); // Repeat every 3s
+
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -83,11 +108,10 @@ const LiveStream = () => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      minHeight: '100vh',  // ensures space is kept
+      minHeight: '100vh',
       padding: '20px',
       backgroundColor: '#f0de3e',
     },
-    
     videoFrame: {
       width: '700px',
       backgroundColor: '#c67ecf',
@@ -96,80 +120,56 @@ const LiveStream = () => {
       borderRadius: '20px',
       boxShadow: '0 8px 24px rgba(37, 232, 190, 0.95)',
     },
-    
     innerVideoContainer: {
-      padding: '50px', // space between frame and video
+      padding: '50px',
       backgroundColor: '#b8234b',
       borderRadius: '12px',
     },
     video: {
       width: '600px',
-      height: '400px',  // <-- fixed height helps layout
+      height: '400px',
       objectFit: 'cover',
       borderRadius: '10px',
       backgroundColor: 'white',
-      
     },
-    
   };
-  
-    
 
   return (
     <div style={{ backgroundColor: '#000', height: '100vh', position: 'relative' }}>
       {/* Top right icons */}
       <div style={{ position: 'absolute', top: 15, right: 20, display: 'flex', gap: 20, zIndex: 10 }}>
-        <button
-          onClick={() => navigate('/calendar')}
-          style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
-          title="Calendar"
-        >
+        <button onClick={() => navigate('/calendar')} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} title="Calendar">
           <FaCalendarAlt size={28} color="white" />
         </button>
-        <button
-          onClick={() => navigate('/settings')}
-          style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
-          title="Elder Info"
-        >
+        <button onClick={() => navigate('/settings')} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} title="Elder Info">
           <FaUser size={28} color="white" />
         </button>
-        <button
-          onClick={() => navigate('/records')}
-          style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
-          title="Records"
-        >
+        <button onClick={() => navigate('/records')} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} title="Records">
           <FaFolderOpen size={28} color="white" />
         </button>
-
-
       </div>
 
-      {error && (
-        <div style={{ color: 'red', textAlign: 'center', padding: '10px' }}>
-          {error}
+      {fallDetected && (
+        <div style={{ position: 'absolute', top: 70, left: '50%', transform: 'translateX(-50%)', color: 'white', backgroundColor: 'red', padding: '10px 20px', borderRadius: '10px', fontWeight: 'bold' }}>
+          🚨 Fall Detected!
         </div>
       )}
 
-{videoUrl ? (
-  <div style={styles.frameWrapper}>
-  <div style={styles.videoFrame}>
-    <div style={styles.innerVideoContainer}>
-      <video
-        ref={videoRef}
-        controls
-        autoPlay
-        playsInline
-        poster="/placeholder.png"
-        style={styles.video}
-      >
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </div>
-  </div>
-) : (
-  <p style={{ color: 'white', textAlign: 'center' }}>Loading stream...</p>
-)}
+      {error && <div style={{ color: 'red', textAlign: 'center', padding: '10px' }}>{error}</div>}
+
+      {videoUrl ? (
+        <div style={styles.frameWrapper}>
+          <div style={styles.videoFrame}>
+            <div style={styles.innerVideoContainer}>
+              <video ref={videoRef} controls autoPlay playsInline poster="/placeholder.png" style={styles.video}>
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <p style={{ color: 'white', textAlign: 'center' }}>Loading stream...</p>
+      )}
     </div>
   );
 };
