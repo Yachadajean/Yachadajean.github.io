@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -35,3 +36,16 @@ export default function CalendarPage() {
     </div>
   );
 }
+=======
+// src/pages/Calendar.js
+import React from 'react';
+
+export default function Calendar() {
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>Settings Page</h2>
+      <p>This is a placeholder Calendar page.</p>
+    </div>
+  );
+}
+>>>>>>> a849ef4fce93ff3eda88e436ecc1039e31ee6514
