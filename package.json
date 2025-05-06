@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "/fall-detection-ui",
+  "proxy": "http://134.208.3.240:5000", 
+
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -19,14 +21,15 @@
     "react-toastify": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-scripts build",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
+"scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build"
+},
+
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -46,8 +49,8 @@
     ]
   },
   "devDependencies": {
+    "customize-cra": "^1.0.0",
     "gh-pages": "^6.3.0",
-    "react-app-rewired": "^2.2.1",
     "workbox-webpack-plugin": "^7.3.0"
   }
 }

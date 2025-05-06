@@ -11,18 +11,17 @@ root.render(
   </React.StrictMode>
 );
 
-// index.js or App.js
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  window.addEventListener('load', function () {
     navigator.serviceWorker.register('/firebase-messaging-sw.js')
-      .then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      })
-      .catch((error) => {
-        console.error('Service Worker registration failed:', error);
+      .then(function (registration) {
+        console.log('ServiceWorker registered: ', registration);
+      }).catch(function (error) {
+        console.error('ServiceWorker registration failed:', error);
       });
   });
 }
+
 
 
 reportWebVitals();

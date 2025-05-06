@@ -1,3 +1,4 @@
+// C:\Users\USER\fall-detection-ui\src\App.js
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { messaging } from './firebase';
@@ -10,12 +11,13 @@ import CreateAccount from './pages/CreateAccount';
 import LiveStream from './pages/LiveStream';
 import Settings from './pages/Settings';
 import Calendar from './pages/Calendar';
-
+import Records from './pages/Records';
 function App() {
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
-    fetch('http://134.208.3.240:5000/status')
+    // ✅ Use relative URL for development proxy
+    fetch('/status')
       .then(res => res.json())
       .then(data => {
         console.log('API response:', data);
@@ -40,8 +42,8 @@ function App() {
             console.warn("FCM Token is null, possible error with Firebase setup");
           } else {
             console.log("FCM Token:", token);
-            // Optional: send token to backend here
-            fetch('http://YOUR_BACKEND_URL/save-token', {
+            // ✅ Send token to backend using relative URL
+            await fetch('/save-token', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -57,9 +59,12 @@ function App() {
       }
     };
 
-    // Listen for foreground messages
+    // ✅ Listen for incoming FCM messages
     onMessage(messaging, (payload) => {
-      toast(`${payload.notification.title}: ${payload.notification.body}`);
+      console.log('Message received:', payload);
+      if (payload.notification) {
+        toast(`${payload.notification.title}: ${payload.notification.body}`);
+      }
     });
 
     requestPermissionAndToken();
@@ -67,13 +72,15 @@ function App() {
 
   return (
     <>
-      <Router>
+      <Router basename="/fall-detection-ui">
         <Routes>
           <Route path="/" element={<LiveStream />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/livestream" element={<LiveStream />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/records" element={<Records />} />
           <Route path="/stream/:ipAddress" element={<LiveStream />} />
         </Routes>
       </Router>

@@ -78,7 +78,7 @@ export default function Home() {
             </div>
             <div className="right-panel">
               <div className="auth-form">
-                <h2>Sign up</h2>
+                <h2>Log in</h2>
                 <div className="form-group">
                   <input 
                     type="text" 

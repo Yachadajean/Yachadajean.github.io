@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Hls from 'hls.js';
-import { FaCalendarAlt, FaCog } from 'react-icons/fa'; // Import icons
+import { FaCalendarAlt, FaUser, FaFolderOpen  } from 'react-icons/fa';
 
 const LiveStream = () => {
   const { ipAddress: paramIpAddress } = useParams();
@@ -9,7 +9,7 @@ const LiveStream = () => {
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
-  const navigate = useNavigate(); // Navigation
+  const navigate = useNavigate();
 
   // Cleanup HLS instance on component unmount
   useEffect(() => {
@@ -26,16 +26,9 @@ const LiveStream = () => {
       return;
     }
 
-    // Backend URL for streaming video from the camera
-    // This is the format you can test from backend:
-    // http://localhost:3000/stream/134.208.3.240
-    // The IP address '134.208.3.240' is used by backend to locate the camera
-    // However, for video player we use HLS .m3u8 stream instead
-
-    let streamUrl;
     try {
       const isIp = /^\d{1,3}(\.\d{1,3}){3}$/.test(paramIpAddress);
-      streamUrl = isIp
+      const streamUrl = isIp
         ? `http://${paramIpAddress}/stream.m3u8`
         : `https://${paramIpAddress}/stream.m3u8`;
 
@@ -85,35 +78,38 @@ const LiveStream = () => {
     }
   }, [paramIpAddress]);
 
-  const captureAndSendFrame = () => {
-    const video = videoRef.current;
-    if (!video || video.readyState < 2) {
-      console.error('Video not ready for capture');
-      return;
-    }
-
-    try {
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      const base64ImageData = canvas.toDataURL('image/jpeg');
-
-      fetch('http://134.208.3.240:5000/detect', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64ImageData }),
-      })
-        .then(res => res.json())
-        .then(data => console.log('Detection result:', data))
-        .catch(err => console.error('Error sending image:', err));
-    } catch (err) {
-      console.error('Frame capture error:', err);
-    }
+  const styles = {
+    frameWrapper: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      padding: '20px',
+      boxSizing: 'border-box',
+      backgroundColor: '#f0de3e',
+    },
+    videoFrame: {
+      border: '10px solid rgba(228, 82, 216, 0.86)', // the visible frame
+      borderRadius: '20px',
+      boxShadow: '0 8px 24px rgba(37, 232, 190, 0.95)',
+      backgroundColor: '#c67ecf',
+    },
+    innerVideoContainer: {
+      padding: '50px', // space between frame and video
+      backgroundColor: '#b8234b',
+      borderRadius: '12px',
+    },
+    video: {
+      width: '600px',
+      height: 'auto',
+      objectFit: 'cover',
+      borderRadius: '10px',
+      display: 'block',
+      backgroundColor: 'black',
+    },
   };
+  
+    
 
   return (
     <div style={{ backgroundColor: '#000', height: '100vh', position: 'relative' }}>
@@ -129,10 +125,19 @@ const LiveStream = () => {
         <button
           onClick={() => navigate('/settings')}
           style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
-          title="Settings"
+          title="Elder Info"
         >
-          <FaCog size={28} color="white" />
+          <FaUser size={28} color="white" />
         </button>
+        <button
+          onClick={() => navigate('/records')}
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
+          title="Records"
+        >
+          <FaFolderOpen size={28} color="white" />
+        </button>
+
+
       </div>
 
       {error && (
@@ -141,37 +146,25 @@ const LiveStream = () => {
         </div>
       )}
 
-      {videoUrl ? (
-        <>
-          <video
-            ref={videoRef}
-            controls
-            autoPlay
-            playsInline
-            style={{ width: '100%', height: '90%' }}
-          >
-            Your browser does not support the video tag.
-          </video>
-          <div style={{ textAlign: 'center', padding: '10px' }}>
-            <button
-              onClick={captureAndSendFrame}
-              style={{
-                padding: '10px 20px',
-                fontSize: '16px',
-                backgroundColor: '#4CAF50',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              Send Frame to Detect
-            </button>
-          </div>
-        </>
-      ) : (
-        <p style={{ color: 'white', textAlign: 'center' }}>Loading stream...</p>
-      )}
+{videoUrl ? (
+  <div style={styles.frameWrapper}>
+  <div style={styles.videoFrame}>
+    <div style={styles.innerVideoContainer}>
+      <video
+        ref={videoRef}
+        controls
+        autoPlay
+        playsInline
+        style={styles.video}
+      >
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+  </div>
+) : (
+  <p style={{ color: 'white', textAlign: 'center' }}>Loading stream...</p>
+)}
     </div>
   );
 };
