@@ -30,7 +30,6 @@ const LiveStream = () => {
         console.log('Status:', data);
         if (data.fall_detected) {
           setFallDetected(true);
-          // Trigger logic to record or notify
         } else {
           setFallDetected(false);
         }
@@ -42,7 +41,7 @@ const LiveStream = () => {
     checkFallStatus(); // Initial check
     const intervalId = setInterval(checkFallStatus, 3000); // Repeat every 3s
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId); // Clean up the interval on unmount
   }, []);
 
   useEffect(() => {

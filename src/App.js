@@ -1,4 +1,3 @@
-// C:\Users\USER\fall-detection-ui\src\App.js
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { messaging } from './firebase';
@@ -12,16 +11,17 @@ import LiveStream from './pages/LiveStream';
 import Settings from './pages/Settings';
 import Calendar from './pages/Calendar';
 import Records from './pages/Records';
+
 function App() {
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
-    // ✅ Use relative URL for development proxy
-    fetch('/status')
+    // ✅ Check connection status
+    fetch('https://falldetection.me/status')
       .then(res => res.json())
       .then(data => {
         console.log('API response:', data);
-        setStatus(data.status);
+        setStatus(data.status); // Assuming the response has a 'status' field
       })
       .catch(error => {
         console.error('Fetch error:', error);
@@ -72,8 +72,8 @@ function App() {
 
   return (
     <>
-<Router basename={process.env.NODE_ENV === 'production' ? '/fall-detection-ui' : ''}>
-<Routes>
+      <Router basename={process.env.NODE_ENV === 'production' ? '/fall-detection-ui' : ''}>
+        <Routes>
           <Route path="/" element={<LiveStream />} />
           <Route path="/home" element={<Home />} />
           <Route path="/create-account" element={<CreateAccount />} />
