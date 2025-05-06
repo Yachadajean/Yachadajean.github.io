@@ -1,0 +1,32 @@
+/* CreateAccount.css */
+.create-account-left {
+    flex: 0 0 30%;
+    transition: all 0.3s ease;
+  }
+  
+  .create-account-right {
+    flex: 0 0 70%;
+    transition: all 0.3s ease;
+  }
+  
+  .create-account-form {
+    max-width: 500px;
+    padding: 40px;
+  }
+  
+  .password-rules {
+    font-size: 12px;
+    color: #666;
+    margin: 5px 0 15px;
+  }
+  
+  .terms-checkbox {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  
+  .terms-checkbox input {
+    margin-right: 10px;
+  }
