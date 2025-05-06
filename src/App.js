@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     // ✅ Check connection status
-    fetch('https://falldetection.me/status')  // Remove the '/api' part if it's not needed
+    fetch('https://api.falldetection.me/status')  // Remove the '/api' part if it's not needed
       .then(res => res.json())
       .then(data => {
         console.log('API response:', data);
@@ -43,7 +43,7 @@ function App() {
           } else {
             console.log("FCM Token:", token);
             // ✅ Send token to backend using relative URL
-            await fetch('/save-token', {
+            await fetch('https://api.falldetection.me/save-token', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
