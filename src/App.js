@@ -74,7 +74,7 @@ function App() {
     <>
       <Router basename="/fall-detection-ui">
         <Routes>
-          <Route path="/" element={<LiveStream />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/livestream" element={<LiveStream />} />
