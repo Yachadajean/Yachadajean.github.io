@@ -83,7 +83,6 @@ const LiveStream = () => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-<<<<<<< HEAD
       minHeight: '100vh',  // ensures space is kept
       padding: '20px',
       backgroundColor: '#f0de3e',
@@ -98,19 +97,6 @@ const LiveStream = () => {
       boxShadow: '0 8px 24px rgba(37, 232, 190, 0.95)',
     },
     
-=======
-      height: '100vh',
-      padding: '20px',
-      boxSizing: 'border-box',
-      backgroundColor: '#f0de3e',
-    },
-    videoFrame: {
-      border: '10px solid rgba(228, 82, 216, 0.86)', // the visible frame
-      borderRadius: '20px',
-      boxShadow: '0 8px 24px rgba(37, 232, 190, 0.95)',
-      backgroundColor: '#c67ecf',
-    },
->>>>>>> a849ef4fce93ff3eda88e436ecc1039e31ee6514
     innerVideoContainer: {
       padding: '50px', // space between frame and video
       backgroundColor: '#b8234b',
@@ -118,7 +104,6 @@ const LiveStream = () => {
     },
     video: {
       width: '600px',
-<<<<<<< HEAD
       height: '400px',  // <-- fixed height helps layout
       objectFit: 'cover',
       borderRadius: '10px',
@@ -126,14 +111,6 @@ const LiveStream = () => {
       
     },
     
-=======
-      height: 'auto',
-      objectFit: 'cover',
-      borderRadius: '10px',
-      display: 'block',
-      backgroundColor: 'black',
-    },
->>>>>>> a849ef4fce93ff3eda88e436ecc1039e31ee6514
   };
   
     
@@ -182,10 +159,7 @@ const LiveStream = () => {
         controls
         autoPlay
         playsInline
-<<<<<<< HEAD
         poster="/placeholder.png"
-=======
->>>>>>> a849ef4fce93ff3eda88e436ecc1039e31ee6514
         style={styles.video}
       >
         Your browser does not support the video tag.
