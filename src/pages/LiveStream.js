@@ -16,7 +16,7 @@ const LiveStream = () => {
   useEffect(() => {
     const checkFallStatus = async () => {
       try {
-        const res = await fetch('https://falldetection.me/status');
+        const res = await fetch('https://api.falldetection.me/status');
         if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
         const data = await res.json();
         console.log('Status:', data);
