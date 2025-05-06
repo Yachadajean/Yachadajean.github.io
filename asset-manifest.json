@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/fall-detection-ui/static/css/main.d7f7fc33.css",
-    "main.js": "/fall-detection-ui/static/js/main.bd827cbb.js",
-    "static/js/453.039bb41f.chunk.js": "/fall-detection-ui/static/js/453.039bb41f.chunk.js",
-    "index.html": "/fall-detection-ui/index.html",
-    "main.d7f7fc33.css.map": "/fall-detection-ui/static/css/main.d7f7fc33.css.map",
-    "main.bd827cbb.js.map": "/fall-detection-ui/static/js/main.bd827cbb.js.map",
-    "453.039bb41f.chunk.js.map": "/fall-detection-ui/static/js/453.039bb41f.chunk.js.map"
+    "main.css": "/static/css/main.d8c1328e.css",
+    "main.js": "/static/js/main.34a1f98c.js",
+    "static/js/453.039bb41f.chunk.js": "/static/js/453.039bb41f.chunk.js",
+    "index.html": "/index.html",
+    "main.d8c1328e.css.map": "/static/css/main.d8c1328e.css.map",
+    "main.34a1f98c.js.map": "/static/js/main.34a1f98c.js.map",
+    "453.039bb41f.chunk.js.map": "/static/js/453.039bb41f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d7f7fc33.css",
-    "static/js/main.bd827cbb.js"
+    "static/css/main.d8c1328e.css",
+    "static/js/main.34a1f98c.js"
   ]
 }
