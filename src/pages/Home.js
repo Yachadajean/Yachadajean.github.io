@@ -103,7 +103,7 @@ export default function Home() {
             </div>
             <div className="right-panel">
               <div className="auth-form">
-                <h2>Log in</h2>
+                <h2>Loggg in</h2>
                 {error && <div className="error-message">{error}</div>}
                 <div className="form-group">
                   <input 

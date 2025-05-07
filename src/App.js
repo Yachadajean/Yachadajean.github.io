@@ -12,16 +12,18 @@ import Settings from './pages/Settings';
 import Calendar from './pages/Calendar';
 import Records from './pages/Records';
 
+const BACKEND_URL = 'http://134.208.3.240:5000'; // Correctly defined constant
+
 function App() {
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
     // ✅ Check connection status
-    fetch('https://api.falldetection.me/status')  // Remove the '/api' part if it's not needed
+    fetch(`${BACKEND_URL}/status`)  // Fixed: using template literals with backticks
       .then(res => res.json())
       .then(data => {
         console.log('API response:', data);
-        setStatus(data.status); // Assuming the response has a 'status' field
+        setStatus(data.status);
       })
       .catch(error => {
         console.error('Fetch error:', error);
@@ -42,10 +44,10 @@ function App() {
             console.warn("FCM Token is null, possible error with Firebase setup");
           } else {
             console.log("FCM Token:", token);
-            localStorage.setItem("token", token); // ✅ Save the token for later use
+            localStorage.setItem("token", token);
           
-            // ✅ Send token to backend using relative URL
-            await fetch('https://api.falldetection.me/save-token', {
+            // ✅ Send token to backend
+            await fetch(`${BACKEND_URL}/save-token`, {  // Fixed: proper template literal
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +55,6 @@ function App() {
               body: JSON.stringify({ token }),
             });
           }
-          
         } else {
           console.warn("Notification permission denied.");
         }
@@ -77,7 +78,7 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LiveStream />} />
           <Route path="/home" element={<Home />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/livestream" element={<LiveStream />} />

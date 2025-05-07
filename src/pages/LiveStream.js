@@ -12,11 +12,16 @@ const LiveStream = () => {
   const hlsRef = useRef(null);
   const navigate = useNavigate();
 
+  // Determine the base URL for the API (uses proxy in development)
+  const apiUrl = window.location.hostname === 'localhost' 
+    ? '/detect'  // Use proxy when in development
+    : 'http://134.208.3.240:5000/detect'; // Full URL for production (update to HTTPS if needed)
+
   // Fetch fall detection status
   useEffect(() => {
     const checkFallStatus = async () => {
       try {
-        const res = await fetch('https://api.falldetection.me/status');
+        const res = await fetch('http://134.208.3.240:5000/status');
         if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
         const data = await res.json();
         console.log('Status:', data);
@@ -106,7 +111,7 @@ const LiveStream = () => {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       const base64Image = canvas.toDataURL("image/jpeg");
 
-      fetch("https://api.falldetection.me/detect", {
+      fetch(apiUrl, {  // Use dynamic URL based on environment
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -120,7 +125,7 @@ const LiveStream = () => {
     }, 5000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [apiUrl]);
 
   const styles = {
     frameWrapper: {
@@ -160,7 +165,7 @@ const LiveStream = () => {
         <button onClick={() => navigate('/calendar')} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} title="Calendar">
           <FaCalendarAlt size={28} color="white" />
         </button>
-        <button onClick={() => navigate('/settings')} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} title="Elder Info">
+        <button onClick={() => navigate('/settings')} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} title="Settings">
           <FaUser size={28} color="white" />
         </button>
         <button onClick={() => navigate('/records')} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} title="Records">
@@ -168,33 +173,17 @@ const LiveStream = () => {
         </button>
       </div>
 
-      {fallDetected && (
-        <div style={{ position: 'absolute', top: 70, left: '50%', transform: 'translateX(-50%)', color: 'white', backgroundColor: 'red', padding: '10px 20px', borderRadius: '10px', fontWeight: 'bold' }}>
-          🚨 Fall Detected!
-        </div>
-      )}
-
-      {error && <div style={{ color: 'red', textAlign: 'center', padding: '10px' }}>{error}</div>}
-
-      {videoUrl ? (
-        <div style={styles.frameWrapper}>
-          <div style={styles.videoFrame}>
-            <div style={styles.innerVideoContainer}>
-              <video
-                ref={videoRef}
-                onCanPlay={() => console.log("Video ready for frame capture")}
-                style={styles.video}
-                autoPlay
-                muted
-                playsInline
-                controls={false}
-              />
-            </div>
+      <div style={styles.frameWrapper}>
+        <div style={styles.videoFrame}>
+          <div style={styles.innerVideoContainer}>
+            {error ? (
+              <h2 style={{ color: 'white' }}>{error}</h2>
+            ) : (
+              <video ref={videoRef} style={styles.video} controls />
+            )}
           </div>
         </div>
-      ) : (
-        <p style={{ color: 'white', textAlign: 'center' }}>Loading stream...</p>
-      )}
+      </div>
     </div>
   );
 };
