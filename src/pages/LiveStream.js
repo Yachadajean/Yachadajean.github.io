@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useParams } from 'react-router-dom'; // Import useParams to access route params
 import Hls from 'hls.js';  // Import HLS.js for live video streaming
 
-const LiveStream = ({ paramIpAddress }) => {
+const LiveStream = () => {
+  const { ipAddress } = useParams(); // Extract ipAddress from route params
   const [fallDetected, setFallDetected] = useState(false);
   const [error, setError] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
@@ -12,7 +14,7 @@ const LiveStream = ({ paramIpAddress }) => {
   useEffect(() => {
     const checkFallStatus = async () => {
       try {
-        const res = await fetch('https://api.falldetection.me/status');  // Use HTTPS
+        const res = await fetch('https://api.falldetection.me/status');
         if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
         const data = await res.json();
         console.log('Status:', data);
@@ -23,23 +25,23 @@ const LiveStream = ({ paramIpAddress }) => {
       }
     };
 
-    checkFallStatus(); // Initial check
-    const intervalId = setInterval(checkFallStatus, 3000); // Repeat every 3s
+    checkFallStatus();
+    const intervalId = setInterval(checkFallStatus, 3000);
 
-    return () => clearInterval(intervalId); // Clean up interval
-  }, []); // Only run on component mount and unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   // Setup video stream
   useEffect(() => {
-    if (!paramIpAddress) {
+    if (!ipAddress) {
       setError('No IP address or domain provided');
       return;
     }
 
-    const isIp = /^\d{1,3}(\.\d{1,3}){3}$/.test(paramIpAddress);
+    const isIp = /^\d{1,3}(\.\d{1,3}){3}$/.test(ipAddress);
     const streamUrl = isIp
-      ? `https://${paramIpAddress}/stream.m3u8`  // Use HTTPS
-      : `https://${paramIpAddress}/stream.m3u8`;
+      ? `https://${ipAddress}/stream.m3u8`
+      : `https://${ipAddress}/stream.m3u8`;
 
     console.log('Attempting to play:', streamUrl);
 
@@ -87,11 +89,11 @@ const LiveStream = ({ paramIpAddress }) => {
       }
     };
 
-  }, [paramIpAddress]);
+  }, [ipAddress]);
 
   return (
     <div>
-      {error && <div className="error">{error}</div>}  {/* Display error if any */}
+      {error && <div className="error">{error}</div>}
       {!error && !fallDetected && <div className="status">Waiting for fall detection...</div>}
       {fallDetected && <div className="status">Fall detected! Please check the camera.</div>}
       <video ref={videoRef} controls style={{ width: '100%', maxHeight: '500px' }} />
