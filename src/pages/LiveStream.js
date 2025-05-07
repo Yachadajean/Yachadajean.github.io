@@ -1,31 +1,41 @@
-// Fetch fall detection status
-useEffect(() => {
-  const checkFallStatus = async () => {
-    try {
-      const res = await fetch('https://api.falldetection.me/status');  // Change to HTTPS
-      if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
-      const data = await res.json();
-      console.log('Status:', data);
-      setFallDetected(data.status === "Camera online");
-    } catch (err) {
-      console.error('Error fetching fall status:', err);
+import React, { useEffect, useState, useRef } from 'react';
+import Hls from 'hls.js';  // Import HLS.js for live video streaming
+
+const LiveStream = ({ paramIpAddress }) => {
+  const [fallDetected, setFallDetected] = useState(false);
+  const [error, setError] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(null);
+  const videoRef = useRef(null);
+  const hlsRef = useRef(null);
+
+  // Fetch fall detection status
+  useEffect(() => {
+    const checkFallStatus = async () => {
+      try {
+        const res = await fetch('https://api.falldetection.me/status');  // Use HTTPS
+        if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
+        const data = await res.json();
+        console.log('Status:', data);
+        setFallDetected(data.status === "Camera online");
+      } catch (err) {
+        console.error('Error fetching fall status:', err);
+        setError('Failed to fetch fall detection status.');
+      }
+    };
+
+    checkFallStatus(); // Initial check
+    const intervalId = setInterval(checkFallStatus, 3000); // Repeat every 3s
+
+    return () => clearInterval(intervalId); // Clean up interval
+  }, []); // Only run on component mount and unmount
+
+  // Setup video stream
+  useEffect(() => {
+    if (!paramIpAddress) {
+      setError('No IP address or domain provided');
+      return;
     }
-  };
 
-  checkFallStatus(); // Initial check
-  const intervalId = setInterval(checkFallStatus, 3000); // Repeat every 3s
-
-  return () => clearInterval(intervalId);
-}, []);
-
-// Setup video stream
-useEffect(() => {
-  if (!paramIpAddress) {
-    setError('No IP address or domain provided');
-    return;
-  }
-
-  try {
     const isIp = /^\d{1,3}(\.\d{1,3}){3}$/.test(paramIpAddress);
     const streamUrl = isIp
       ? `https://${paramIpAddress}/stream.m3u8`  // Use HTTPS
@@ -64,11 +74,29 @@ useEffect(() => {
     } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
       videoRef.current.src = streamUrl;
       videoRef.current.addEventListener('loadedmetadata', () => setError(null));
+    } else {
+      setError('Your browser does not support HLS streams.');
     }
 
     setVideoUrl(streamUrl);
-  } catch (err) {
-    console.error('Stream setup error:', err);
-    setError('Failed to setup video stream');
-  }
-}, [paramIpAddress]);
+
+    // Cleanup HLS instance on component unmount or IP address change
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+      }
+    };
+
+  }, [paramIpAddress]);
+
+  return (
+    <div>
+      {error && <div className="error">{error}</div>}  {/* Display error if any */}
+      {!error && !fallDetected && <div className="status">Waiting for fall detection...</div>}
+      {fallDetected && <div className="status">Fall detected! Please check the camera.</div>}
+      <video ref={videoRef} controls style={{ width: '100%', maxHeight: '500px' }} />
+    </div>
+  );
+};
+
+export default LiveStream;
