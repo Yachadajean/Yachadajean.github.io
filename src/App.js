@@ -12,14 +12,17 @@ import Settings from './pages/Settings';
 import Calendar from './pages/Calendar';
 import Records from './pages/Records';
 
-const BACKEND_URL = 'http://134.208.3.240:5000'; // Correctly defined constant
+// Update backend URL for production or development environment
+const BACKEND_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000'  // Development environment
+  : 'https://api.falldetection.me';  // Use HTTPS for production
 
 function App() {
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
     // ✅ Check connection status
-    fetch(`${BACKEND_URL}/status`)  // Fixed: using template literals with backticks
+    fetch(`${BACKEND_URL}/status`)  // Using HTTPS/HTTP based on the environment
       .then(res => res.json())
       .then(data => {
         console.log('API response:', data);
@@ -37,7 +40,7 @@ function App() {
         if (permission === "granted") {
           console.log("Notification permission granted.");
           const token = await getToken(messaging, {
-            vapidKey: 'BKDr9lAqH-s2eMkTkUJMis7LLxZWqHkXNveZrPM3wg6N400X9Pt4iCw2Bx1lWTcSPN4a7O8MASH8P0FQ2H4CNjk'
+            vapidKey: process.env.REACT_APP_VAPID_KEY  // Use environment variable for VAPID Key
           });
 
           if (!token) {
@@ -47,7 +50,7 @@ function App() {
             localStorage.setItem("token", token);
           
             // ✅ Send token to backend
-            await fetch(`${BACKEND_URL}/save-token`, {  // Fixed: proper template literal
+            await fetch(`${BACKEND_URL}/save-token`, {  // Use HTTPS for production
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
