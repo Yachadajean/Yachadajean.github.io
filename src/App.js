@@ -72,9 +72,9 @@ function App() {
 
   return (
     <>
-      <Router basename={process.env.NODE_ENV === 'production' ? '/fall-detection-ui' : ''}>
+      <Router>
         <Routes>
-          <Route path="/" element={<LiveStream />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/livestream" element={<LiveStream />} />

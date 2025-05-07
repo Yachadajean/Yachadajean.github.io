@@ -20,11 +20,7 @@ const LiveStream = () => {
         if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
         const data = await res.json();
         console.log('Status:', data);
-        if (data.status === "Camera online") {
-          setFallDetected(true);
-        } else {
-          setFallDetected(false);
-        }
+        setFallDetected(data.status === "Camera online");
       } catch (err) {
         console.error('Error fetching fall status:', err);
       }
@@ -33,10 +29,10 @@ const LiveStream = () => {
     checkFallStatus(); // Initial check
     const intervalId = setInterval(checkFallStatus, 3000); // Repeat every 3s
 
-    return () => clearInterval(intervalId); // Clean up the interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
-  // Fetch video stream URL
+  // Setup video stream
   useEffect(() => {
     if (!paramIpAddress) {
       setError('No IP address or domain provided');
@@ -58,9 +54,7 @@ const LiveStream = () => {
         hls.loadSource(streamUrl);
         hls.attachMedia(videoRef.current);
 
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          setError(null);
-        });
+        hls.on(Hls.Events.MANIFEST_PARSED, () => setError(null));
 
         hls.on(Hls.Events.ERROR, (event, data) => {
           console.error('HLS error:', data);
@@ -83,9 +77,7 @@ const LiveStream = () => {
         });
       } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
         videoRef.current.src = streamUrl;
-        videoRef.current.addEventListener('loadedmetadata', () => {
-          setError(null);
-        });
+        videoRef.current.addEventListener('loadedmetadata', () => setError(null));
       }
 
       setVideoUrl(streamUrl);
@@ -94,6 +86,41 @@ const LiveStream = () => {
       setError('Failed to setup video stream');
     }
   }, [paramIpAddress]);
+
+  // Periodic frame capture and send
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.warn("No token found in localStorage");
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      const video = videoRef.current;
+      if (!video || video.readyState < 2) return;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const base64Image = canvas.toDataURL("image/jpeg");
+
+      fetch("https://api.falldetection.me/detect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image: base64Image,
+          token: token
+        }),
+      })
+        .then(res => res.json())
+        .then(data => console.log("Detection:", data))
+        .catch(err => console.error("Image send error:", err));
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const styles = {
     frameWrapper: {
@@ -153,12 +180,15 @@ const LiveStream = () => {
         <div style={styles.frameWrapper}>
           <div style={styles.videoFrame}>
             <div style={styles.innerVideoContainer}>
-            <img
-              src="https://api.falldetection.me/video_feed"
-              alt="Live video stream"
-              style={styles.video}
-            />
-
+              <video
+                ref={videoRef}
+                onCanPlay={() => console.log("Video ready for frame capture")}
+                style={styles.video}
+                autoPlay
+                muted
+                playsInline
+                controls={false}
+              />
             </div>
           </div>
         </div>
