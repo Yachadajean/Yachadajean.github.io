@@ -42,6 +42,8 @@ function App() {
             console.warn("FCM Token is null, possible error with Firebase setup");
           } else {
             console.log("FCM Token:", token);
+            localStorage.setItem("token", token); // ✅ Save the token for later use
+          
             // ✅ Send token to backend using relative URL
             await fetch('https://api.falldetection.me/save-token', {
               method: 'POST',
@@ -51,6 +53,7 @@ function App() {
               body: JSON.stringify({ token }),
             });
           }
+          
         } else {
           console.warn("Notification permission denied.");
         }
