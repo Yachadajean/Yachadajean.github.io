@@ -11,6 +11,7 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null); // To store error messages
 
   const pages = [
     {
@@ -38,12 +39,36 @@ export default function Home() {
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       alert('Please enter both fields');
       return;
     }
-    navigate('/livestream');
+
+    try {
+      const response = await fetch('https://your-backend-api.com/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Invalid credentials');
+      }
+
+      const data = await response.json();
+      // Assume the backend returns a token upon successful login
+      localStorage.setItem('token', data.token); // Store the token in localStorage
+      navigate('/livestream'); // Navigate to the next page after successful login
+
+    } catch (err) {
+      setError(err.message); // Display error message
+    }
   };
 
   const handleCreateAccount = () => {
@@ -79,6 +104,7 @@ export default function Home() {
             <div className="right-panel">
               <div className="auth-form">
                 <h2>Log in</h2>
+                {error && <div className="error-message">{error}</div>}
                 <div className="form-group">
                   <input 
                     type="text" 
