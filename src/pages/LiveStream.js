@@ -38,10 +38,8 @@ const LiveStream = () => {
       return;
     }
 
-    const isIp = /^\d{1,3}(\.\d{1,3}){3}$/.test(ipAddress);
-    const streamUrl = isIp
-      ? `https://${ipAddress}/stream.m3u8`
-      : `https://${ipAddress}/stream.m3u8`;
+    const streamUrl = 'https://api.falldetection.me/video_feed';
+
 
     console.log('Attempting to play:', streamUrl);
 
