@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'; // Import useParams to access rout
 import Hls from 'hls.js';  // Import HLS.js for live video streaming
 
 const LiveStream = () => {
-  const { ipAddress } = useParams(); // Extract ipAddress from route params
   const [fallDetected, setFallDetected] = useState(false);
   const [error, setError] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
@@ -33,10 +32,7 @@ const LiveStream = () => {
 
   // Setup video stream
   useEffect(() => {
-    if (!ipAddress) {
-      setError('No IP address or domain provided');
-      return;
-    }
+
 
     const streamUrl = 'https://api.falldetection.me/video_feed';
 
@@ -87,7 +83,7 @@ const LiveStream = () => {
       }
     };
 
-  }, [ipAddress]);
+  }, []);
 
   return (
     <div>

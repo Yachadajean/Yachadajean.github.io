@@ -88,7 +88,6 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/records" element={<Records />} />
-          <Route path="/stream/:ipAddress" element={<LiveStream />} />
         </Routes>
       </Router>
       <ToastContainer />
