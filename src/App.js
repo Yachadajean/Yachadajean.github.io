@@ -10,7 +10,7 @@ import CreateAccount from './pages/CreateAccount';
 import LiveStream from './pages/LiveStream';
 import Settings from './pages/Settings';
 import Calendar from './pages/Calendar';
-import Records from './pages/Records';
+import GalleryLayout from './pages/GalleryLayout.js';
 
 // Update backend URL for production or development environment
 const BACKEND_URL = window.location.hostname === 'localhost' 
@@ -87,12 +87,12 @@ function App() {
           <Route path="/livestream" element={<LiveStream />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/calendar" element={<Calendar />} />
-          <Route path="/records" element={<Records />} />
+          <Route path="/gallerylayout" element={<GalleryLayout />} />
         </Routes>
       </Router>
-      <ToastContainer />
-    </>
+      <ToastContainer />       
+    </>                                   
   );
-}
+}      
 
 export default App;
