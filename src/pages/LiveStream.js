@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom'; // Import useParams to access route params
 import Hls from 'hls.js';  // Import HLS.js for live video streaming
+import './LiveStream.css';
 
 const LiveStream = () => {
   const [fallDetected, setFallDetected] = useState(false);
@@ -90,7 +91,14 @@ const LiveStream = () => {
       {error && <div className="error">{error}</div>}
       {!error && !fallDetected && <div className="status">Waiting for fall detection...</div>}
       {fallDetected && <div className="status">Fall detected! Please check the camera.</div>}
-      <video ref={videoRef} controls style={{ width: '100%', maxHeight: '500px' }} />
+      
+      <div style={{ textAlign: 'center' }}>
+        <video
+          ref={videoRef}
+          controls
+          className="video-frame"
+        />
+      </div>
     </div>
   );
 };

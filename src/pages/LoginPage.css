@@ -1,0 +1,251 @@
+/* Apply Lato globally */
+:root {
+  --light-blue: #AEC7FF;
+  --blue: #5B86E5;
+}
+
+body, html {
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+  background-color: #AEC7FF;
+  color: #2d482f;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.left-panel {
+  flex: 4;
+  background-color: #AEC7FF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.text-content {
+  text-align: left;
+  color: #ffffff;
+  max-width: 80%;
+}
+
+.text-content h1 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.3; /* Optional: tightens spacing */
+}
+
+.text-content h2 {
+  margin: 0;
+  padding: 0;
+  line-height: 1; /* Optional: tightens spacing */
+}
+
+.highlight {
+  color: #5B86E5;
+  font-weight: bold;
+}
+
+.hero-gif {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  filter: drop-shadow(0 4px 30px rgba(221, 226, 122, 0.374));
+  margin-left: 20px;
+}
+
+.page-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.right-panel {
+  flex: 6;
+  background-color: rgb(255, 255, 255);
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  width: min(90%, 800px);
+}
+
+h3 {
+  font-size: 2rem; /* Example size */
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 15px; /* Ensure both inputs have the same padding */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  background: transparent;
+  box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.input-group label {
+  position: static;
+  top: 0;
+  left: 0;
+  font-size: 16px;
+  color: gray;
+  transition: all 0.2s ease;
+  pointer-events: none; /* Prevent label from being clickable */
+  transform: translateY(-50%);
+}
+
+.input-group input:focus {
+  border-color: #AEC7FF; /* Change the border color on focus */
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  color: transparent;
+  font-size: 12px; /* Smaller font size when focused or typing */
+  transform: translateY(-20px); /* Move the label up */
+}
+
+.input-group input:focus {
+  border-bottom: 2px solid #AEC7FF; /* Underline the input when focused */
+}
+
+.input-group input:placeholder-shown {
+  border-bottom: 1px solid #ccc; /* Regular border before typing */
+}
+
+/* Password toggle visibility */
+.password-input {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%; /* Ensures the password box takes the full width */
+}
+
+.password-input input {
+  width: calc(105% - 40px); /* Adjust width so the icon doesn't affect the input size */
+  padding: 15px; /* Ensures same height as email input */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.password-input button {
+  background: transparent;
+  border: none;
+  color: #5B86E5;
+  padding: 0 8px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: -40px; /* Space between the input field and the button */
+  padding-left: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .hero-gif {
+    width: 60%;
+  }
+}
+
+.error-message {
+  color: #d23c3c;
+  background: #fed7d7;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.login-button {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #5B86E5; /* Blue background */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 20px; /* Ensure the button is not too close to the input */
+}
+/* Hover effect */
+.login-button:hover {
+  background-color: #AEC7FF; /* Lighten the blue */
+  transform: translateY(-2px); /* Slightly raise the button */
+}
+
+/* Focus effect */
+.login-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(91, 134, 229, 0.7);
+}
+
+/* Disabled state */
+.login-button:disabled {
+  background-color: #B8D8FF; /* Lighter blue when disabled */
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.signup-link {
+  font-size: 1rem; /* Adjust font size for readability */
+  text-align: center; /* Center-align the text */
+  margin-top: 20px; /* Add space above the link */
+  color: #2d482f; /* Set text color to match design */
+}
+
+.signup-link a {
+  color: #5B86E5; /* Color of the link */
+  font-weight: bold;
+  text-decoration: none; /* Remove underline */
+  transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.signup-link a:hover {
+  color: #AEC7FF; /* Change link color on hover */
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .signup-link {
+    font-size: 0.9rem; /* Adjust font size for mobile screens */
+  }
+}

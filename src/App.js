@@ -5,7 +5,7 @@ import { getToken, onMessage } from 'firebase/messaging';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import Home from './pages/Home';
+import LoginPage from './pages/LoginPage';
 import CreateAccount from './pages/CreateAccount';
 import LiveStream from './pages/LiveStream';
 import Settings from './pages/Settings';
@@ -82,8 +82,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LiveStream />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/create-account" element={<CreateAccount />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<CreateAccount />} />
           <Route path="/livestream" element={<LiveStream />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/calendar" element={<Calendar />} />

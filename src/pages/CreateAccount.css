@@ -1,32 +1,124 @@
-/* CreateAccount.css */
+.create-account-container {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+}
+
 .create-account-left {
-    flex: 0 0 30%;
-    transition: all 0.3s ease;
+  flex: 0 0 30%;
+  background-color: #E6F0FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.greetings-gif {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  filter: drop-shadow(0 4px 30px rgba(226, 122, 191, 0.374));
+  margin-left: 20px;
+}
+
+.panel-image {
+  width: 80%;
+  max-width: 300px;
+}
+
+.Sign-up-form {
+  width: min(90%, 800px);
+}
+
+.create-account-right {
+  flex: 0 0 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-account-form {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.create-account-form h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.create-account-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.password-input {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 35%;
+  cursor: pointer;
+  color: #999;
+}
+
+.create-account-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.create-account-form .login-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.create-account-form .login-link span {
+  color: #4A90E2;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.login-link {
+  font-size: 1rem; /* Adjust font size for readability */
+  text-align: center; /* Center-align the text */
+  margin-top: 20px; /* Add space above the link */
+  color: #2d482f; /* Set text color to match design */
+}
+
+.login-link a {
+  color: #5B86E5; /* Color of the link */
+  font-weight: bold;
+  text-decoration: none; /* Remove underline */
+  transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.login-link a:hover {
+  color: #AEC7FF; /* Change link color on hover */
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .login-link {
+    font-size: 0.9rem; /* Adjust font size for mobile screens */
   }
-  
-  .create-account-right {
-    flex: 0 0 70%;
-    transition: all 0.3s ease;
-  }
-  
-  .create-account-form {
-    max-width: 500px;
-    padding: 40px;
-  }
-  
-  .password-rules {
-    font-size: 12px;
-    color: #666;
-    margin: 5px 0 15px;
-  }
-  
-  .terms-checkbox {
-    display: flex;
-    align-items: center;
-    margin: 20px 0;
-    font-size: 14px;
-  }
-  
-  .terms-checkbox input {
-    margin-right: 10px;
-  }
+}

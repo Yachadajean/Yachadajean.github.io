@@ -1,0 +1,10 @@
+.video-frame {
+    display: block;       /* Make the video a block-level element */
+    margin: 0 auto;       /* Center it horizontally */
+    width: 80%;           /* Scale width to 80% of its container */
+    max-width: 1000px;    /* Maximum width */
+    height: fit-content;  /* Maintain aspect ratio */
+    max-height: 500px;    /* Maximum height */
+    object-fit: cover;    /* Ensure video fits within frame without distortion */
+}
+  
