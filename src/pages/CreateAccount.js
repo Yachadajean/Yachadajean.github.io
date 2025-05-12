@@ -37,7 +37,7 @@ export default function CreateAccount() {
 
     try {
       setIsLoading(true);
-      const response = await fetch('https://your-backend-api.com/signup', {
+      const response = await fetch('https://api.falldetection.me/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),

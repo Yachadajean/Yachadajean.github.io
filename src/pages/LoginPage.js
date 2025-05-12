@@ -22,32 +22,31 @@ export default function LoginPage() {
       setError('Please fill in all fields');
       return;
     }
-
+  
     if (!/\S+@\S+\.\S+/.test(email)) {
       setError('Please enter a valid email');
       return;
     }
-
-
+  
     try {
       setIsLoading(true);
-      const response = await fetch('https://your-backend-api.com/login', {
+      const response = await fetch('https://api.falldetection.me/login', {  // Ensure this points to your backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.error || 'Login failed');
       }
-
+  
       // Successful login
-      localStorage.setItem('token', data.token);
-      navigate('/livestream');
+      localStorage.setItem('token', data.token);  // Save token to localStorage
+      navigate('/livestream');  // Redirect after login
       
     } catch (err) {
       setError(err.message || 'An error occurred during login');
@@ -55,6 +54,7 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
+  
 
 
 

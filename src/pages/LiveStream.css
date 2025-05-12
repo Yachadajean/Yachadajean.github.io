@@ -1,10 +1,81 @@
 .video-frame {
-    display: block;       /* Make the video a block-level element */
-    margin: 0 auto;       /* Center it horizontally */
-    width: 80%;           /* Scale width to 80% of its container */
-    max-width: 1000px;    /* Maximum width */
-    height: fit-content;  /* Maintain aspect ratio */
-    max-height: 500px;    /* Maximum height */
-    object-fit: cover;    /* Ensure video fits within frame without distortion */
-}
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    max-height: 500px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+
+  .container {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+.error {
+    background-color: #ffe5e5;
+    color: #b00020;
+    padding: 14px 20px;
+    margin: 16px auto;
+    border: 1px solid #b00020;
+    border-left: 5px solid #b00020;
+    border-radius: 8px;
+    width: fit-content;
+    max-width: 90%;
+    font-weight: 600;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeInSlide 0.4s ease-in-out;
+  }
+  
+  .status {
+    background-color: #e7f3fe;
+    color: #084298;
+    padding: 14px 20px;
+    margin: 16px auto;
+    border: 1px solid #b6d4fe;
+    border-left: 5px solid #0d6efd;
+    border-radius: 8px;
+    width: fit-content;
+    max-width: 90%;
+    font-weight: 500;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    animation: fadeInSlide 0.4s ease-in-out;
+  }
+  
+
+  @keyframes fadeInSlide {
+    0% {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .gallery-button {
+    background-color: #1976d2;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .gallery-button:hover {
+    background-color: #145ca8;
+  }
+  
+  
   

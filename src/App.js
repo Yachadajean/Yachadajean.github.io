@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import { messaging } from './firebase';
 import { getToken, onMessage } from 'firebase/messaging';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +13,9 @@ import LiveStream from './pages/LiveStream';
 import Settings from './pages/Settings';
 import Calendar from './pages/Calendar';
 import GalleryLayout from './pages/GalleryLayout.js';
+import SizeContainer from './pages/SizeContainer'; 
+import Onboarding from './pages/Onboarding';  
+import BuildLayOut from './pages/BuildLayOut';
 
 // Update backend URL for production or development environment
 const BACKEND_URL = window.location.hostname === 'localhost' 
@@ -20,7 +25,7 @@ const BACKEND_URL = window.location.hostname === 'localhost'
 function App() {
   const [status, setStatus] = useState(null);
 
-  useEffect(() => {
+  useEffect(() => { // Fetching Data
     // ✅ Check connection status
     fetch(`${BACKEND_URL}/status`)  // Using HTTPS/HTTP based on the environment
       .then(res => res.json())
@@ -81,13 +86,18 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<LiveStream />} />
+          <Route path="/" element={<BuildLayOut />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<CreateAccount />} />
-          <Route path="/livestream" element={<LiveStream />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/calendar" element={<Calendar />} />
-          <Route path="/gallerylayout" element={<GalleryLayout />} />
+          <Route path="/gallery" element={<GalleryLayout />} />
+          <Route path="/buildlayout" element={<BuildLayOut />} />
+          <Route path="/livestream" element={
+            <SizeContainer>
+              <LiveStream />
+            </SizeContainer>
+          } />
         </Routes>
       </Router>
       <ToastContainer />       
@@ -96,3 +106,5 @@ function App() {
 }      
 
 export default App;
+
+

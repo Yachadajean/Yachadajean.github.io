@@ -1,0 +1,12 @@
+/* SizeContainer.css */
+.size-container {
+    max-width: 1200px;  /* Set the maximum width of the container */
+    margin: 0 auto;     /* Center the container horizontally */
+    padding: 20px;      /* Add padding inside the container */
+    box-sizing: border-box; /* Ensure padding doesn't overflow */
+    display: flex;      /* Enable flexbox for better control */
+    justify-content: center; /* Center content horizontally */
+    align-items: center;  /* Center content vertically (if height is defined) */
+    min-height: 100vh;    /* Ensure the container takes full viewport height */
+  }
+  

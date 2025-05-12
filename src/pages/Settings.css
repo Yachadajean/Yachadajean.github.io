@@ -1,0 +1,48 @@
+.settings-container {
+    padding: 20px;
+    background-color: #f0f8ff;
+  }
+  
+  .settings-section {
+    margin-bottom: 30px;
+  }
+  
+  .settings-section h3 {
+    color: #4CAF50;
+  }
+  
+  .settings-section div {
+    margin-bottom: 10px;
+  }
+  
+  label {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  select, input[type="email"], input[type="password"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  input[type="checkbox"] {
+    margin-top: 10px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
