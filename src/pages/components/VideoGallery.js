@@ -24,6 +24,42 @@ const VideoGallery = ({ onVideoSelect }) => {
         url: 'https://www.w3schools.com/html/mov_bbb.mp4',
         thumbnailUrl: 'https://via.placeholder.com/150?text=Placeholder3',
       },
+      {
+        id: '1',
+        title: 'Placeholder Video 1',
+        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        thumbnailUrl: 'https://via.placeholder.com/150?text=Placeholder1',
+      },
+      {
+        id: '2',
+        title: 'Placeholder Video 2',
+        url: 'https://www.w3schools.com/html/movie.mp4',
+        thumbnailUrl: 'https://via.placeholder.com/150?text=Placeholder2',
+      },
+      {
+        id: '3',
+        title: 'Placeholder Video 3',
+        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        thumbnailUrl: 'https://via.placeholder.com/150?text=Placeholder3',
+      },
+      {
+        id: '3',
+        title: 'Placeholder Video 3',
+        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        thumbnailUrl: 'https://via.placeholder.com/150?text=Placeholder3',
+      },
+      {
+        id: '3',
+        title: 'Placeholder Video 3',
+        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        thumbnailUrl: 'https://via.placeholder.com/150?text=Placeholder3',
+      },
+      {
+        id: '5',
+        title: 'Placeholder Video 3',
+        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        thumbnailUrl: 'https://via.placeholder.com/150?text=Placeholder3',
+      },
     ];
     setVideos(placeholderVideos);
   }, []);

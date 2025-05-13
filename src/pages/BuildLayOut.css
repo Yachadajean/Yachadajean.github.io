@@ -49,9 +49,100 @@
   .right-side {
     background-color: #AEC7FF;
     flex-grow: 1; /* Allow the right side to take up the remaining space */
+    overflow-y: auto;
   }
   
   .layout-content {
     /* You can add more specific styling for your main content within the right side if needed */
     padding: 20px; /* Example padding */
   }
+
+
+  .placeholder {
+    width: 95%;                        /* Match .video-thumbnail */
+    margin: 0;                         /* Remove auto margins */
+    padding: 20px;
+    background-color: #f0f4ff;
+    border: 2px dashed #5B86E5;
+    border-radius: 12px;
+    font-size: 18px;
+    color: #555;
+    text-align: left;
+    box-sizing: border-box;
+  }
+  
+  
+
+  /*From VideoGallery.css*/
+  .video-gallery-container {
+    flex: 1;    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  
+
+  .video-list {
+    flex: 1;    
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    max-height: auto;       
+    overflow-y: auto;         /* Enable scroll if content overflows */
+    box-sizing: border-box;
+    padding-right: 8px;
+  }
+  
+  
+  .video-list::-webkit-scrollbar {
+    width: 8px;                  /* Vertical scrollbar width */
+  }
+  
+  .video-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+  
+  
+
+  .video-thumbnail {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 95%;
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    box-sizing: border-box;
+  }
+
+  .video-thumbnail:hover {
+    transform: translateX(10px);
+  }
+
+/* Replace 'img' with 'video' for preview */
+.video-thumbnail video {
+  width: 90%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+  .video-thumbnail p {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+    word-break: break-word;
+  }
+  
