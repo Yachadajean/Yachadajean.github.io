@@ -5,6 +5,8 @@
   "homepage": "https://falldetection.me",
   "proxy": "https://134.208.3.240:5000",
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^13.4.0",
@@ -15,6 +17,7 @@
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-calendar": "^5.1.0",
+    "react-datepicker": "^8.3.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.9.0",

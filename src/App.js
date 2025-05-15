@@ -86,7 +86,8 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<BuildLayOut />} />
+          <Route path="/" element={<CreateAccount />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<CreateAccount />} />
           <Route path="/settings" element={<Settings />} />

@@ -6,19 +6,20 @@ const pages = [
   {
     gif: 'animations/caring.gif',
     text: '24/7 Caring Monitoring for Your Loved Ones',
-    bgColor: '#ffffff',
+    bgColor: 'linear-gradient(135deg, #AEC7FF, #5B86E5)',
   },
   {
     gif: 'animations/cctv.gif',
     text: 'Smart Surveillance for Your Peace of Mind',
-    bgColor: '#ffffff',
+    bgColor: 'linear-gradient(135deg, #FFDEE9, #B5FFFC)',
   },
   {
     gif: 'animations/protect.gif',
     text: 'Immediate Protection When It Matters Most',
-    bgColor: '#ffffff',
+    bgColor: 'linear-gradient(135deg, #FBC2EB, #A6C1EE)',
   },
 ];
+
 
 export default function Onboarding() {
   const [page, setPage] = useState(0);
@@ -37,22 +38,33 @@ export default function Onboarding() {
   if (showLogin) return <LoginPage />;
 
   return (
-    <div className="onboarding-wrapper">
-      <div className="onboarding-card">
-        <button className="onboarding-skip" onClick={skip}>
-          Skip
-        </button>
-        <div>
-          <img
-            src={pages[page].gif}
-            alt="slide gif"
-            className="onboarding-image"
-          />
-          <h2 className="onboarding-text">{pages[page].text}</h2>
+    <div className="onboarding-wrapper" style={{ background: pages[page].bgColor }}>
+      <div className="onboarding-container" style={{ background: pages[page].bgColor }}>
+        <div className="onboarding-card">
+          <button className="onboarding-skip" onClick={skip}>
+            Skip
+          </button>
+          <div>
+            <img
+              src={pages[page].gif}
+              alt={pages[page].text}
+              className="onboarding-image"
+            />
+            <h2 className="onboarding-text">{pages[page].text}</h2>
+          </div>
+          <button className="onboarding-button" onClick={handleNext}>
+            {page === pages.length - 1 ? 'Get Started' : 'Next'}
+          </button>
+          <div className="onboarding-dots">
+            {pages.map((_, i) => (
+              <span
+                key={i}
+                className={`dot ${i === page ? 'active' : ''}`}
+              />
+            ))}
+          </div>
+
         </div>
-        <button className="onboarding-button" onClick={handleNext}>
-          {page === pages.length - 1 ? 'Get Started' : 'Next'}
-        </button>
       </div>
     </div>
   );

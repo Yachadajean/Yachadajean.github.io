@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
 import './CreateAccount.css'; 
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -68,8 +68,8 @@ export default function LoginPage() {
       <h1 style={{ fontSize: '3rem' }}>We watch, so you don't have to worry.</h1>
       <br />
       <h1 style={{ fontSize: '3rem' }}><span className="highlight">Smart fall detection</span></h1>
-      <h2 style={{ fontSize: '2rem' }}>for safer independent living.</h2> <br /> <br /> 
-    </div>
+      <h2 style={{ fontSize: '2rem', color: '#5B86E5' }}>for safer independent living.</h2>
+      </div>
 
     <img 
       src="/images/nursing-home.png" 
@@ -80,29 +80,35 @@ export default function LoginPage() {
 
   {/* Right Panel - White Background (60%) */}
   <div className="right-panel">
-    <form className="login-form" onSubmit={handleLogin}>
-      <h3>Log in</h3>
+  <form className="login-form" onSubmit={handleLogin}>
+  <h3>Log in</h3>
 
-      {error && <div className="error-message">{error}</div>}
+  <div className={`error-message ${error ? '' : 'hidden'}`} aria-live="assertive">
+    {error || '\u00A0'}
+  </div>
 
-      <div className="input-group">
-        <label>Email</label>
-        <input 
-          type="email" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value.trim())}
-          disabled={isLoading}
-        />
-      </div>
+  <div className="input-group">
+    <label>Email</label>
+    <input 
+      type="email" 
+      value={email}
+      onChange={e => setEmail(e.target.value)}
+      disabled={isLoading}
+      autoComplete="email"
+      required
+    />
+  </div>
 
-      <div className="input-group">
-      <label>Password</label>
-      <div className="password-input">
+  <div className="input-group">
+    <label>Password</label>
+    <div className="password-input">
       <input
         type={showPassword ? 'text' : 'password'}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         disabled={isLoading}
+        autoComplete="current-password"
+        required
       />
       <button
         type="button"
@@ -112,21 +118,26 @@ export default function LoginPage() {
       >
         {showPassword ? <FaEyeSlash /> : <FaEye />}
       </button>
-      </div>
-      </div>
+    </div>
+  </div>
 
-      <button 
-        type="submit" 
-        className="login-button"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Logging in...' : 'Login'}
-      </button>
+  <p className="forgot-password">
+    <Link to="/forgot-password">Forgot password?</Link>
+  </p>
 
-      <p className="signup-link">
-        Don't have an assistant? <a href="/signup">Sign Up Here</a>
-      </p>
-    </form>
+  <button 
+    type="submit" 
+    className="login-button"
+    disabled={isLoading}
+  >
+    {isLoading ? 'Logging in...' : 'Login'}
+  </button>
+
+  <p className="signup-link">
+    Don't have an assistant? <Link to="/signup">Sign Up Here</Link>
+  </p>
+</form>
+
   </div>
 </div>
 

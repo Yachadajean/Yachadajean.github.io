@@ -61,17 +61,7 @@
   font-size: 14px;
 }
 
-.password-input {
-  position: relative;
-}
 
-.eye-icon {
-  position: absolute;
-  right: 10px;
-  top: 35%;
-  cursor: pointer;
-  color: #999;
-}
 
 .create-account-form button {
   width: 100%;
@@ -121,4 +111,53 @@
   .login-link {
     font-size: 0.9rem; /* Adjust font size for mobile screens */
   }
+}
+
+.password-input {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  padding: 0 1px;
+  background-color: white;
+}
+
+.password-input input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+}
+
+.password-input button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #5B86E5;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 8px; /* Adjust this value as needed */
+}
+
+
+
+.highlight {
+  color: #5B86E5;
+  font-weight: bold;
+}
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  margin-bottom: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  margin-top: 8px;
 }

@@ -1,135 +1,179 @@
 .layout-container {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-    font-family: sans-serif;
-  }
-  
-  .left-side {
-    align-items: center;
-    background-color: rgb(255, 255, 255);
-    width: 70%; /* Adjust the width as needed */
-    font-size: 20px;
-    text-align: center;
-    border-radius: 0 20px 20px 0;
-    box-shadow: 0px 10px 25px #4A90E2;
-    margin-right: 20px;
-    display: flex; /* Enable flexbox for positioning buttons */
-    flex-direction: column; /* Stack content vertically */
-    justify-content: flex; /* Push buttons to the bottom */
-    padding-top: 40px;
-  }
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  font-family: sans-serif;
+}
 
-  .left-side h1 {
-    margin-top: 10px; /* Add space below the title */
-    margin-bottom: 20px;
-  }
-
-  .left-side-buttons {
-    display: flex; /* Arrange buttons horizontally */
-    justify-content: center; /* Center the buttons */
-    gap: 20px; /* Add some space between buttons */
-    margin-bottom: 100px;  /*Add space below the buttons if needed */
-  }
-
-  .left-side-buttons button {
-  background-color: #5B86E5;
-  color: #ffffff;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
+.goback-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  margin-bottom: -40px;
-  }
+  font-size: 14px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
 
-  
-  .right-side {
-    background-color: #AEC7FF;
-    flex-grow: 1; /* Allow the right side to take up the remaining space */
-    overflow-y: auto;
-  }
-  
-  .layout-content {
-    /* You can add more specific styling for your main content within the right side if needed */
-    padding: 20px; /* Example padding */
-  }
+.goback-button:hover {
+  background-color: #f0f0f0;
+}
+
+/* arrow styles */
+.arrow {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #000;
+  border-right: 2px solid #000;
+}
+
+.arrow-left {
+  transform: rotate(-135deg);
+}
 
 
-  .placeholder {
-    width: 95%;                        /* Match .video-thumbnail */
-    margin: 0;                         /* Remove auto margins */
-    padding: 20px;
-    background-color: #f0f4ff;
-    border: 2px dashed #5B86E5;
-    border-radius: 12px;
-    font-size: 18px;
-    color: #555;
-    text-align: left;
-    box-sizing: border-box;
-  }
-  
-  
+.left-side {
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  width: 70%; /* Adjust the width as needed */
+  font-size: 20px;
+  text-align: center;
+  border-radius: 0 20px 20px 0;
+  box-shadow: 0px 10px 25px #4A90E2;
+  margin-right: 20px;
+  display: flex; /* Enable flexbox for positioning buttons */
+  flex-direction: column; /* Stack content vertically */
+  justify-content: flex; /* Push buttons to the bottom */
+  padding-top: 40px;
+  overflow: hidden;
+  transition: flex-basis 0.3s ease-in-out; /* Transition the width/size instead of height */
+  flex-shrink: 0; /* Prevent it from shrinking */
+}
 
-  /*From VideoGallery.css*/
-  .video-gallery-container {
-    flex: 1;    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  
+.left-side h1 {
+  margin-top: 10px; /* Add space below the title */
+  margin-bottom: 20px;
+}
 
-  .video-list {
-    flex: 1;    
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-    width: 100%;
-    max-width: 100%;
-    max-height: auto;       
-    overflow-y: auto;         /* Enable scroll if content overflows */
-    box-sizing: border-box;
-    padding-right: 8px;
-  }
-  
-  
-  .video-list::-webkit-scrollbar {
-    width: 8px;                  /* Vertical scrollbar width */
-  }
-  
-  .video-list::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-  }
-  
-  
+.left-side-buttons {
+  display: flex; /* Arrange buttons horizontally */
+  justify-content: center; /* Center the buttons */
+  gap: 20px; /* Add some space between buttons */
+  margin-bottom: 100px;  /*Add space below the buttons if needed */
+}
 
-  .video-thumbnail {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    width: 95%;
-    max-width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-    box-sizing: border-box;
-  }
+.left-side-buttons button {
+background-color: #5B86E5;
+color: #ffffff;
+padding: 10px 18px;
+border: none;
+border-radius: 20px;
+font-size: 12px;
+font-weight: bold;
+cursor: pointer;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+margin-bottom: -40px;
+}
 
-  .video-thumbnail:hover {
-    transform: translateX(10px);
-  }
+
+.right-side {
+  background-color: #AEC7FF;
+  flex-grow: 1; /* Allow the right side to take up the remaining space */
+  overflow-y: auto;
+  display: flex; /* Enable flexbox for the right side */
+  flex-direction: column; /* Stack content vertically */
+  gap: 20px; /* Space between the different content sections */
+  padding: 20px; /* Add some padding around the content */
+  box-sizing: border-box;
+  min-height: 600px; /* Adjust this value based on the taller content (Calendar or Alert History) */
+}
+
+.layout-content {
+  /* You can add more specific styling for your main content within the right side if needed */
+  padding: 20px; /* Example padding */
+}
+
+
+.placeholder {
+  width: 95%;          /* Match .video-thumbnail */
+  margin: 0;                      /* Remove auto margins */
+  padding: 20px;
+  background-color: #f0f4ff;
+  border: 2px dashed #5B86E5;
+  border-radius: 12px;
+  font-size: 18px;
+  color: #555;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+
+/*From VideoGallery.css*/
+.video-gallery-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+
+.video-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+  max-height: auto;
+  overflow-y: auto;          /* Enable scroll if content overflows */
+  box-sizing: border-box;
+  padding-right: 8px;
+}
+
+
+.video-list::-webkit-scrollbar {
+  width: 8px;                  /* Vertical scrollbar width */
+}
+
+.video-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+
+.video-thumbnail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 95%;
+  max-width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.video-thumbnail:hover {
+  transform: translateX(10px);
+}
 
 /* Replace 'img' with 'video' for preview */
 .video-thumbnail video {
@@ -139,10 +183,171 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-  .video-thumbnail p {
-    margin-top: 5px;
-    font-size: 14px;
-    color: #333;
-    word-break: break-word;
-  }
-  
+.video-thumbnail p {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #333;
+  word-break: break-word;
+}
+
+
+/* Calendar Container */
+.calendar-container {
+  width: 100%; /* Make it take the full width of the right-side */
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
+}
+
+.calendar-wrapper {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.custom-calendar {
+  width: 100%;        /* Take full width of calendar-wrapper */
+  max-width: none;    /* Remove max constraint if not needed */
+  min-width: 0;      /* Prevent minimum sizing issues */
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+}
+
+
+/* Navigation buttons */
+.custom-calendar .react-calendar__navigation button {
+  background-color: #5B86E5;
+  color: white;
+  border-radius: 10px;
+  margin: 2px;
+  font-weight: bold;
+}
+
+.custom-calendar .react-calendar__navigation button:hover {
+  background-color: #4A6ED8;
+}
+
+/* Tiles (day cells) */
+.custom-calendar .react-calendar__tile {
+  color: #9ab6ed;
+  padding: 15px 0;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-calendar .react-calendar__tile:enabled:hover {
+  background-color: #D0E1FF;
+}
+
+.custom-calendar .react-calendar__tile--active {
+  background-color: #5B86E5;
+  color: white;
+  font-weight: bold;
+}
+
+.custom-calendar .react-calendar__tile--now {
+  background-color: #5B86E5;
+  color: rgb(255, 255, 255);
+}
+
+.custom-calendar .react-calendar__navigation__label {
+  color: #5f7ed1;
+  font-weight: bold;
+  font-size: 1rem;
+  width: 100px; /* Fixed width */
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ... other CSS rules ... */
+
+.custom-calendar .react-calendar__tile.has-fall-recording {
+  position: relative; /* Needed for absolute positioning of the dot */
+}
+
+.custom-calendar .react-calendar__tile.has-fall-recording::after {
+  content: '';
+  position: absolute;
+  top: 5px; /* Adjust vertical position as needed */
+  right: 5px; /* Adjust horizontal position as needed */
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+
+.back-button {
+  margin: 20px auto 0 auto; /* ⬅️ centers it horizontally */
+  background-color: #4A90E2;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #356AC3;
+}
+
+.alert-history-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.alert-history {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+}
+
+.alert-title {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.alert-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.alert-time, .alert-date {
+  font-size: 0.9rem;
+}
+
+.calendar-container {
+  width: 100%; /* Make it take the full width of the right-side */
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
+}

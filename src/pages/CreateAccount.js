@@ -61,8 +61,11 @@ export default function CreateAccount() {
       {/* Left Panel */}
       <div style={{ flex: 4, backgroundColor: '#AEC7FF', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px' }}>
         <div className="text-content">
-          <h1 style={{ fontSize: '3rem' }}>Join our <span className="highlight">smart care network</span></h1>
-          <h2 style={{ fontSize: '2rem' }}>Get fall detection alerts and peace of mind.</h2> <br /><br /> <br /><br /> 
+          <h1 style={{ fontSize: '3rem' }}>Join our 
+          <br />
+          <span className="highlight">smart care network</span></h1>
+          <h2 style={{ fontSize: '2rem', color: '#ffffff' }}>Get fall detection alerts and peace of mind.</h2> <br /><br /> <br /><br /> 
+          
         </div>
         <img 
           src="/images/greetings.png" 
@@ -77,15 +80,16 @@ export default function CreateAccount() {
           <h3>Create Account</h3>
 
           {error && <div className="error-message">{error}</div>}
-
           <div className="input-group">
             <label>Username</label>
-            <input 
-              type="text" 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              disabled={isLoading}
-            />
+            <div className="password-input">
+              <input 
+                type="text" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
           </div>
 
           <div className="input-group">
