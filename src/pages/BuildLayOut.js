@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 export default function BuildLayOut() {
   const [selectedVideoUrl, setSelectedVideoUrl] = useState(null);
   const [activeContent, setActiveContent] = useState('Fall Videos');
-
   const [videos, setVideos] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -17,7 +16,6 @@ export default function BuildLayOut() {
   const navigate = useNavigate();
   const [fallRecordingDates, setFallRecordingDates] = useState(new Set());
 
-  // State variables for alert filters
   const [filterYear, setFilterYear] = useState('');
   const [filterMonth, setFilterMonth] = useState('');
   const [filterDay, setFilterDay] = useState('');
@@ -25,59 +23,34 @@ export default function BuildLayOut() {
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
-
-
   useEffect(() => {
     const savedVideoUrl = localStorage.getItem('selectedVideoUrl');
-    if (savedVideoUrl) {
-      setSelectedVideoUrl(savedVideoUrl);
-    }
-  
-    const mockAlerts = [
-      { timestamp: '2024-10-26T10:00:00.000Z' },
-      { timestamp: '2024-10-26T10:15:00.000Z' },
-      { timestamp: '2025-01-15T12:30:00.000Z' },
-      { timestamp: '2025-05-01T08:00:00.000Z' },
-      { timestamp: '2025-05-01T08:45:00.000Z' },
-      { timestamp: '2023-12-20T16:00:00.000Z' },
-    ];
-  
-    // Fetch video recordings
+    if (savedVideoUrl) setSelectedVideoUrl(savedVideoUrl);
+
     fetch('https://api.falldetection.me/api/recordings')
       .then(res => res.json())
       .then(data => setVideos(data))
       .catch(err => console.error('Failed to load videos:', err));
-  
-    // Fetch alert history
+
     fetch('https://api.falldetection.me/api/alerts')
       .then(res => res.json())
-      .then(data => {
-        setAlerts(mockAlerts);
-        console.log("Fetched alerts:", data);
-      })
+      .then(data => setAlerts(data))
       .catch(err => console.error('Failed to load alerts:', err));
   }, []);
 
   useEffect(() => {
-    // Calculate unique years after alerts data is available
-    const years = [...new Set(alerts.map(alert => {
-      console.log("Processing alert timestamp:", alert.timestamp); // <--- ADD THIS LINE
-      const date = new Date(alert.timestamp);
-      return date.getFullYear();
-    }))];
+    const years = [...new Set(alerts.map(alert => new Date(alert.timestamp).getFullYear()))];
     setUniqueYears(years);
-    console.log("Unique years:", years);
-  }, [alerts]); // Depend on the 'alerts' state
+  }, [alerts]);
 
   const fallDetectedVideos = videos.filter(video => video.includes('fall'));
 
   useEffect(() => {
-    // Extract dates with fall recordings
     const datesWithFalls = fallDetectedVideos.map(file => {
       const match = file.match(/(\d{8})_\d{6}/);
       return match ? new Date(
         parseInt(match[1].slice(0, 4)),
-        parseInt(match[1].slice(4, 6)) - 1, // Month is 0-indexed
+        parseInt(match[1].slice(4, 6)) - 1,
         parseInt(match[1].slice(6, 8))
       ).toDateString() : null;
     }).filter(date => date !== null);
@@ -89,14 +62,9 @@ export default function BuildLayOut() {
     localStorage.setItem('selectedVideoUrl', videoUrl);
   };
 
-  const handleButtonClick = (contentType) => {
-    setActiveContent(contentType);
-  };
+  const handleButtonClick = (contentType) => setActiveContent(contentType);
 
-  const formatDate = (date) => {
-    if (!date) return '';
-    return date.toISOString().split('T')[0].replace(/-/g, '');
-  };
+  const formatDate = (date) => !date ? '' : date.toISOString().split('T')[0].replace(/-/g, '');
 
   const groupByDate = (videoList) => {
     const groups = {};
@@ -122,18 +90,12 @@ export default function BuildLayOut() {
     ? fallDetectedVideos.filter(file => file.includes(formatDate(selectedDate)))
     : fallDetectedVideos;
 
-  const tileClassName = ({ date, view }) => {
-    if (view === 'month' && fallRecordingDates.has(date.toDateString())) {
-      return 'has-fall-recording';
-    }
-    return null;
-  };
+  const tileClassName = ({ date, view }) => view === 'month' && fallRecordingDates.has(date.toDateString()) ? 'has-fall-recording' : null;
 
-  // Function to filter alerts based on selected year, month, and day
   const filteredAlerts = alerts.filter(alert => {
     const alertDate = new Date(alert.timestamp);
     const yearMatch = !filterYear || alertDate.getFullYear() === parseInt(filterYear);
-    const monthMatch = !filterMonth || alertDate.getMonth() + 1 === parseInt(filterMonth); // Month is 0-indexed
+    const monthMatch = !filterMonth || alertDate.getMonth() + 1 === parseInt(filterMonth);
     const dayMatch = !filterDay || alertDate.getDate() === parseInt(filterDay);
     return yearMatch && monthMatch && dayMatch;
   });
@@ -147,24 +109,9 @@ export default function BuildLayOut() {
         <h1>Fall Recordings</h1>
 
         <div className="left-side-buttons">
-          <button
-            className={activeContent === 'Fall Videos' ? 'active' : ''}
-            onClick={() => handleButtonClick('Fall Videos')}
-          >
-            Fall Videos
-          </button>
-          <button
-            className={activeContent === 'Alert History' ? 'active' : ''}
-            onClick={() => handleButtonClick('Alert History')}
-          >
-            Alert History
-          </button>
-          <button
-            className={activeContent === 'Date Filter' ? 'active' : ''}
-            onClick={() => handleButtonClick('Date Filter')}
-          >
-            Date Filter
-          </button>
+          <button className={activeContent === 'Fall Videos' ? 'active' : ''} onClick={() => handleButtonClick('Fall Videos')}>Fall Videos</button>
+          <button className={activeContent === 'Alert History' ? 'active' : ''} onClick={() => handleButtonClick('Alert History')}>Alert History</button>
+          <button className={activeContent === 'Date Filter' ? 'active' : ''} onClick={() => handleButtonClick('Date Filter')}>Date Filter</button>
         </div>
 
         {selectedVideoUrl && <VideoPlayer videoUrl={selectedVideoUrl} />}
@@ -181,9 +128,7 @@ export default function BuildLayOut() {
                 </video>
               </div>
             ) : (
-              <div className="placeholder">
-                <p>Select a video to view</p>
-              </div>
+              <div className="placeholder"><p>Select a video to view</p></div>
             )}
             <div className="video-list">
               {Object.entries(groupedVideos).map(([date, files]) => (
@@ -191,11 +136,7 @@ export default function BuildLayOut() {
                   <h3>{date}</h3>
                   <div className="video-thumbnails">
                     {files.map((file, idx) => (
-                      <div
-                        key={idx}
-                        className="video-thumbnail"
-                        onClick={() => setSelectedVideo(file)}
-                      >
+                      <div key={idx} className="video-thumbnail" onClick={() => setSelectedVideo(file)}>
                         <video src={`https://api.falldetection.me/recordings/${file}`} muted />
                         <p>{file}</p>
                       </div>
@@ -211,46 +152,26 @@ export default function BuildLayOut() {
           <div className="alert-history-container">
             <div className="alert-history">
               <h2 className="alert-title">Alert History</h2>
-
-              {/* Filter Controls */}
               <div className="alert-filters">
-              <div>
+                <div>
                   <label htmlFor="year-filter">Year:</label>
-                  <select
-                    id="year-filter"
-                    value={filterYear}
-                    onChange={(e) => setFilterYear(e.target.value)}
-                  >
+                  <select id="year-filter" value={filterYear} onChange={(e) => setFilterYear(e.target.value)}>
                     <option value="">All Years</option>
-                    {uniqueYears.map(year => (
-                      <option key={year} value={year}>{year}</option>
-                    ))}
+                    {uniqueYears.map(year => <option key={year} value={year}>{year}</option>)}
                   </select>
                 </div>
                 <div>
                   <label htmlFor="month-filter">Month:</label>
-                  <select
-                    id="month-filter"
-                    value={filterMonth}
-                    onChange={(e) => setFilterMonth(e.target.value)}
-                  >
+                  <select id="month-filter" value={filterMonth} onChange={(e) => setFilterMonth(e.target.value)}>
                     <option value="">All Months</option>
-                    {months.map(month => (
-                      <option key={month} value={month}>{month}</option>
-                    ))}
+                    {months.map(month => <option key={month} value={month}>{month}</option>)}
                   </select>
                 </div>
                 <div>
                   <label htmlFor="day-filter">Day:</label>
-                  <select
-                    id="day-filter"
-                    value={filterDay}
-                    onChange={(e) => setFilterDay(e.target.value)}
-                  >
+                  <select id="day-filter" value={filterDay} onChange={(e) => setFilterDay(e.target.value)}>
                     <option value="">All Days</option>
-                    {days.map(day => (
-                      <option key={day} value={day}>{day}</option>
-                    ))}
+                    {days.map(day => <option key={day} value={day}>{day}</option>)}
                   </select>
                 </div>
               </div>
@@ -263,12 +184,8 @@ export default function BuildLayOut() {
                     <div key={idx} className="alert-item">
                       <input type="checkbox" checked={false} readOnly />
                       <div className="alert-details">
-                        <span className="alert-time">
-                          {new Date(alert.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                        <span className="alert-date">
-                          {new Date(alert.timestamp).toLocaleDateString()}
-                        </span>
+                        <span className="alert-time">{new Date(alert.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span className="alert-date">{new Date(alert.timestamp).toLocaleDateString()}</span>
                       </div>
                     </div>
                   ))}
@@ -287,7 +204,7 @@ export default function BuildLayOut() {
                   onChange={setSelectedDate}
                   value={selectedDate}
                   className="custom-calendar"
-                  tileClassName={tileClassName} // Apply the conditional class
+                  tileClassName={tileClassName}
                 />
               ) : (
                 <div className="video-gallery">
@@ -300,11 +217,7 @@ export default function BuildLayOut() {
                           <h3>{date}</h3>
                           <div className="video-thumbnails">
                             {files.map((file, idx) => (
-                              <div
-                                key={idx}
-                                className="video-thumbnail"
-                                onClick={() => setSelectedVideo(file)}
-                              >
+                              <div key={idx} className="video-thumbnail" onClick={() => setSelectedVideo(file)}>
                                 <video src={`https://api.falldetection.me/recordings/${file}`} muted />
                                 <p>{file}</p>
                               </div>
@@ -314,9 +227,6 @@ export default function BuildLayOut() {
                       ))}
                     </div>
                   )}
-                  <button onClick={() => setSelectedDate(null)} className="back-button">
-                    ← Back to Calendar
-                  </button>
                 </div>
               )}
             </div>

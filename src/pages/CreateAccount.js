@@ -18,7 +18,7 @@ export default function CreateAccount() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(null); // use null here instead of ''
 
     if (!username || !email || !password || !confirmPassword) {
       setError('Please fill in all fields');
@@ -47,8 +47,8 @@ export default function CreateAccount() {
 
       if (!response.ok) throw new Error(data.message || 'Signup failed');
 
-      // Redirect to login
-      navigate('/');
+      // Redirect to login page (assuming '/' is login route)
+      navigate('/login');
     } catch (err) {
       setError(err.message || 'An error occurred during signup');
     } finally {

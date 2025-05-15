@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import { messaging } from './firebase';
 import { getToken, onMessage } from 'firebase/messaging';
@@ -25,43 +25,31 @@ const BACKEND_URL = window.location.hostname === 'localhost'
 function App() {
   const [status, setStatus] = useState(null);
 
-  useEffect(() => { // Fetching Data
-    // ✅ Check connection status
-    fetch(`${BACKEND_URL}/status`)  // Using HTTPS/HTTP based on the environment
-      .then(res => res.json())
-      .then(data => {
-        console.log('API response:', data);
-        setStatus(data.status);
-      })
-      .catch(error => {
-        console.error('Fetch error:', error);
-        setStatus('Failed to connect');
-      });
-
-    // ✅ Firebase Notification Setup
+  useEffect(() => {
+    // Request permission and get token (your existing code here)
     const requestPermissionAndToken = async () => {
       try {
         const permission = await Notification.requestPermission();
         if (permission === "granted") {
           console.log("Notification permission granted.");
           const token = await getToken(messaging, {
-            vapidKey: process.env.REACT_APP_VAPID_KEY  // Use environment variable for VAPID Key
+            vapidKey: process.env.REACT_APP_VAPID_KEY
           });
-
+  
           if (!token) {
             console.warn("FCM Token is null, possible error with Firebase setup");
           } else {
             console.log("FCM Token:", token);
             localStorage.setItem("token", token);
-          
-            // ✅ Send token to backend
-            await fetch(`${BACKEND_URL}/save-token`, {  // Use HTTPS for production
+  
+            await fetch(`${BACKEND_URL}/save-token`, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ token }),
+            }).catch(err => {
+              console.error('Error saving token to backend', err);
             });
+            
           }
         } else {
           console.warn("Notification permission denied.");
@@ -70,23 +58,29 @@ function App() {
         console.error("Error getting FCM token", err);
       }
     };
-
-    // ✅ Listen for incoming FCM messages
-    onMessage(messaging, (payload) => {
+  
+    // Set up listener for incoming messages
+    const unsubscribe = onMessage(messaging, (payload) => {
       console.log('Message received:', payload);
       if (payload.notification) {
         toast(`${payload.notification.title}: ${payload.notification.body}`);
       }
     });
-
+  
     requestPermissionAndToken();
+  
+    // Cleanup function to unsubscribe when component unmounts
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
-
+  
+  //<Route path="/" element={<Navigate to="/livestream" replace />} />
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<CreateAccount />} />
+         <Route path="/" element={<Onboarding />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<CreateAccount />} />

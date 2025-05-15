@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoginPage from './LoginPage';
 import './Onboarding.css';
+
+const BACKEND_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:5000'
+  : 'https://api.falldetection.me';
 
 const pages = [
   {
@@ -20,20 +24,44 @@ const pages = [
   },
 ];
 
-
 export default function Onboarding() {
   const [page, setPage] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
+  const [status, setStatus] = useState(null);
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
+  useEffect(() => {
+    // Check if onboarding is already done
+    if (localStorage.getItem("onboardingDone")) {
+      setShowLogin(true);
+    }
+
+    // Fetch backend status
+    fetch(`${BACKEND_URL}/status`)
+    .then(res => res.json())
+      .then(data => {
+        setStatus(data.status);
+        setCheckingStatus(false);
+      })
+      .catch(() => {
+        setStatus('Failed to connect');
+        setCheckingStatus(false);
+      });
+  }, []);
+
+  const skip = () => {
+    localStorage.setItem("onboardingDone", "true");
+    setShowLogin(true);
+  };
 
   const handleNext = () => {
     if (page < pages.length - 1) {
       setPage(page + 1);
     } else {
+      localStorage.setItem("onboardingDone", "true");
       setShowLogin(true);
     }
   };
-
-  const skip = () => setShowLogin(true);
 
   if (showLogin) return <LoginPage />;
 
@@ -41,9 +69,7 @@ export default function Onboarding() {
     <div className="onboarding-wrapper" style={{ background: pages[page].bgColor }}>
       <div className="onboarding-container" style={{ background: pages[page].bgColor }}>
         <div className="onboarding-card">
-          <button className="onboarding-skip" onClick={skip}>
-            Skip
-          </button>
+          <button className="onboarding-skip" onClick={skip}>Skip</button>
           <div>
             <img
               src={pages[page].gif}
@@ -57,16 +83,21 @@ export default function Onboarding() {
           </button>
           <div className="onboarding-dots">
             {pages.map((_, i) => (
-              <span
-                key={i}
-                className={`dot ${i === page ? 'active' : ''}`}
-              />
+              <span key={i} className={`dot ${i === page ? 'active' : ''}`} />
             ))}
+            {status && (
+              <p style={{ fontSize: '12px', color: 'gray', marginTop: '10px' }}>
+                Server: {status}
+              </p>
+            )}
+            {checkingStatus && (
+              <p style={{ fontSize: '11px', color: 'lightgray' }}>
+                Checking server status...
+              </p>
+            )}
           </div>
-
         </div>
       </div>
     </div>
   );
 }
-

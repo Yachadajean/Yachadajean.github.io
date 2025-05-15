@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCog, faArrowLeft, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; // Import jwt-decode
+import { jwtDecode } from 'jwt-decode';
 
 function Settings() {
     const navigate = useNavigate();
@@ -24,33 +24,28 @@ function Settings() {
     const [relation, setRelation] = useState('');
     const [emergencyPhone, setEmergencyPhone] = useState('');
     const [careNotes, setCareNotes] = useState('');
+    const [saving, setSaving] = useState(false);
 
-    // New state for video quality
-    const [videoQuality, setVideoQuality] = useState('medium'); // Default to 'medium'
-    // New state for notifications
-    const [notificationsEnabled, setNotificationsEnabled] = useState(true); // Default to enabled
+    const [videoQuality, setVideoQuality] = useState('medium');
+    const [notificationsEnabled, setNotificationsEnabled] = useState(true);
     const [alertSound, setAlertSound] = useState(true);
     const [notificationTypes, setNotificationTypes] = useState({
         fallDetected: true,
         cameraOffline: true,
     });
 
-    // New state for application settings
-    const [theme, setTheme] = useState('system'); // Default to system
-    const [fontSize, setFontSize] = useState('medium'); // Default to medium
+    const [theme, setTheme] = useState('system');
+    const [fontSize, setFontSize] = useState('medium');
     const [autoStart, setAutoStart] = useState(false);
     const [keepScreenOn, setKeepScreenOn] = useState(true);
 
-    // New state for Date and Time
     const [dateFormat, setDateFormat] = useState('MM/DD/YYYY');
     const [timeZone, setTimeZone] = useState('GMT');
 
-
-    // New state for User Profile
-    const [userEmail, setUserEmail] = useState('');  // Assume you have this from JWT or elsewhere
+    const [userEmail, setUserEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [userId, setUserId] = useState(null);
-    const [token, setToken] = useState(null); // State to hold the token
+    const [token, setToken] = useState(null);
 
     const healthConditionOptions = ['', 'None', 'Diabetes', 'Asthma', 'Heart Disease'];
     const mobilityAidOptions = ['', 'None', 'Cane', 'Walker', 'Wheelchair'];
@@ -58,12 +53,8 @@ function Settings() {
     const medicationOptions = ['', 'None', 'Insulin', 'Albuterol', 'Aspirin'];
     const relationOptions = ['', 'Parent', 'Spouse', 'Sibling', 'Friend'];
 
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const years = Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - 50 + i);
-
-    const getDaysInMonth = (year, monthIndex) => {
-        return new Date(year, monthIndex + 1, 0).getDate();
-    };
+    const currentYear = new Date().getFullYear();
+    const endOfCurrentYear = new Date(currentYear, 11, 31);
 
     useEffect(() => {
         if (dob) {
@@ -74,14 +65,12 @@ function Settings() {
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
-            setToken(storedToken); // Set the token in state
+            setToken(storedToken);
             try {
-                // Decode the token to extract the user_id (you can use a library like `jwt-decode` for this)
-                const decoded = jwtDecode(storedToken);  // Make sure to import jwt-decode
+                const decoded = jwtDecode(storedToken);
                 setUserId(decoded.user_id);
             } catch (error) {
                 console.error("Error decoding token:", error);
-                // Handle the error appropriately, e.g., clear the invalid token
                 localStorage.removeItem('token');
                 setToken(null);
                 setUserId(null);
@@ -90,8 +79,7 @@ function Settings() {
     }, []);
 
     useEffect(() => {
-        if (userId && token) { // Only fetch if both userId and token are available
-            // Fetch the settings for the user when the page loads
+        if (userId && token) {
             fetch(`https://your-backend-api.com/api/settings?user_id=${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -100,14 +88,12 @@ function Settings() {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.user_id) {
-                        // Set state with fetched settings
                         setDateFormat(data.date_format);
                         setTimeZone(data.time_zone);
                         setNotificationsEnabled(data.alert_enabled);
                         setAlertSound(data.alert_sound);
                         setVideoQuality(data.video_quality);
-                        //setVideoRetention(data.video_retention);  // Removed videoRetention
-                        setUserEmail(data.email); // set user email
+                        setUserEmail(data.email);
                     }
                 })
                 .catch((error) => {
@@ -122,7 +108,12 @@ function Settings() {
     };
 
     const handleGoBack = () => {
-      navigate('./pages/LiveStream');
+        navigate('/livestream');
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
     };
 
     const handleSaveSettings = () => {
@@ -137,21 +128,19 @@ function Settings() {
             relation,
             emergencyPhone,
             careNotes,
-            videoQuality, // Include videoQuality in saved settings
-            notificationsEnabled, // Include notifications settings
+            videoQuality,
+            notificationsEnabled,
             notificationTypes,
             dateFormat,
             timeZone,
             alertSound,
-            //videoRetention, // Removed videoRetention
             userEmail,
             newPassword
-            // ... other settings data
         };
-        console.log("Saving settings:", updatedSettings);
-        // In a real application, you would send this data to your backend API
-        if (token) { // Only send if token is available
-            fetch('https://api.falldetection./api/settings', {  // Corrected endpoint
+
+        if (token) {
+            setSaving(true);
+            fetch('https://api.falldetection.com/api/settings', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -167,24 +156,14 @@ function Settings() {
                 })
                 .catch((error) => {
                     console.error('Error updating settings:', error);
+                })
+                .finally(() => {
+                    setSaving(false);
                 });
         } else {
-            console.warn("Token is not available.  Settings not saved.");
+            console.warn("Token is not available. Settings not saved.");
         }
     };
-
-
-
-    const currentYear = new Date().getFullYear();
-    const endOfCurrentYear = new Date(currentYear, 11, 31);
-
-    const handleLogout = () => {
-        // Perform any necessary logout actions (e.g., clearing local storage, session)
-        console.log("Logging out");
-        // Navigate to the login page
-        navigate('/login'); // Assuming your LoginPage is at the '/login' route
-    };
-
 
     return (
         <div className="layout-container">
@@ -192,47 +171,33 @@ function Settings() {
                 <span className="arrow arrow-left"></span>
             </button>
             <aside className="left-side-settings">
-            <div
-    className={`sidebar-icon-item ${activeSection === 'userInfo' ? 'active' : ''}`}
-    onClick={() => setActiveSection('userInfo')}
->
-    <FontAwesomeIcon icon={faUser} /> {/* This is an SVG element */}
-    <span>User Info</span>
-</div>
-<div
-    className={`sidebar-icon-item ${activeSection === 'settings' ? 'active' : ''}`}
-    onClick={() => setActiveSection('settings')}
->
-    <FontAwesomeIcon icon={faCog} /> {/* This is also an SVG element */}
-    <span>Settings</span>
-</div>
-<div className="sidebar-icon-item" onClick={handleLogout}>
-    <FontAwesomeIcon icon={faSignOutAlt} /> {/* And this one too */}
-    <span>Log Out</span>
-</div>
+                <div className={`sidebar-icon-item ${activeSection === 'userInfo' ? 'active' : ''}`}
+                    onClick={() => setActiveSection('userInfo')}>
+                    <FontAwesomeIcon icon={faUser} />
+                    <span>User Info</span>
+                </div>
+                <div className={`sidebar-icon-item ${activeSection === 'settings' ? 'active' : ''}`}
+                    onClick={() => setActiveSection('settings')}>
+                    <FontAwesomeIcon icon={faCog} />
+                    <span>Settings</span>
+                </div>
+                <div className="sidebar-icon-item" onClick={handleLogout}>
+                    <FontAwesomeIcon icon={faSignOutAlt} />
+                    <span>Log Out</span>
+                </div>
             </aside>
             <main className="right-side-settings">
-                <h2>
-                    {activeSection === 'userInfo' ? 'User Information' : 'Settings'}
-                </h2>
+                <h2>{activeSection === 'userInfo' ? 'User Information' : 'Settings'}</h2>
 
                 {activeSection === 'userInfo' && (
                     <div className="user-info-details">
-                        <div className="info-row">
-                            <label>Email:</label>
-                            <span>{email} (Read-only)</span>
-                        </div>
-                        <div className="info-row">
-                            <label>Full Name:</label>
-                            <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-                        </div>
-                        <div className="info-row">
-                            <label>Date of Birth:</label>
+                        <div className="info-row"><label>Email:</label><span>{userEmail}</span></div>
+                        <div className="info-row"><label>Full Name:</label><input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} /></div>
+                        <div className="info-row"><label>Date of Birth:</label>
                             <DatePicker
                                 selected={startDate}
                                 onChange={handleDateChange}
                                 dateFormat="yyyy/MM/dd"
-                                placeholderText="YYYY/MM/DD"
                                 className="date-picker-input"
                                 showYearDropdown
                                 showMonthDropdown
@@ -240,8 +205,7 @@ function Settings() {
                                 maxDate={endOfCurrentYear}
                             />
                         </div>
-                        <div className="info-row">
-                            <label>Gender:</label>
+                        <div className="info-row"><label>Gender:</label>
                             <select value={gender} onChange={(e) => setGender(e.target.value)}>
                                 <option value="">Select</option>
                                 <option value="male">Male</option>
@@ -249,124 +213,70 @@ function Settings() {
                                 <option value="other">Other</option>
                             </select>
                         </div>
-                        <div className="info-row">
-                            <label>Health Conditions:</label>
+                        <div className="info-row"><label>Health Conditions:</label>
                             <select value={conditions} onChange={(e) => setConditions(e.target.value)}>
-                                {healthConditionOptions.map((option) => (
-                                    <option key={option} value={option}>{option || 'Select'}</option>
-                                ))}
+                                {healthConditionOptions.map((opt) => <option key={opt} value={opt}>{opt || 'Select'}</option>)}
                             </select>
                         </div>
-                        <div className="info-row">
-                            <label>Mobility Aids:</label>
+                        <div className="info-row"><label>Mobility Aids:</label>
                             <select value={mobilityAids} onChange={(e) => setMobilityAids(e.target.value)}>
-                                {mobilityAidOptions.map((option) => (
-                                    <option key={option} value={option}>{option || 'Select'}</option>
-                                ))}
+                                {mobilityAidOptions.map((opt) => <option key={opt} value={opt}>{opt || 'Select'}</option>)}
                             </select>
                         </div>
-                        <div className="info-row">
-                            <label>Medications:</label>
+                        <div className="info-row"><label>Medications:</label>
                             <select value={medications} onChange={(e) => setMedications(e.target.value)}>
-                            {medicationOptions.map((option) => (
-                                    <option key={option} value={option}>{option || 'Select'}</option>
-                                ))}
+                                {medicationOptions.map((opt) => <option key={opt} value={opt}>{opt || 'Select'}</option>)}
                             </select>
                         </div>
-
                         <h4>Emergency Contact Info</h4>
-                        <div className="info-row">
-                            <label>Emergency Contact Name:</label>
-                            <input type="text" value={emergencyName} onChange={(e) => setEmergencyName(e.target.value)} />
-                        </div>
-                        <div className="info-row">
-                            <label>Relation:</label>
+                        <div className="info-row"><label>Emergency Contact Name:</label><input type="text" value={emergencyName} onChange={(e) => setEmergencyName(e.target.value)} /></div>
+                        <div className="info-row"><label>Relation:</label>
                             <select value={relation} onChange={(e) => setRelation(e.target.value)}>
-                                {relationOptions.map((option) => (
-                                    <option key={option} value={option}>{option || 'Select'}</option>
-                                ))}
+                                {relationOptions.map((opt) => <option key={opt} value={opt}>{opt || 'Select'}</option>)}
                             </select>
                         </div>
-                        <div className="info-row">
-                            <label>Phone Number:</label>
-                            <input type="tel" value={emergencyPhone} onChange={(e) => setEmergencyPhone(e.target.value)} />
-                        </div>
-                        <div className="info-row">
-                            <label>Care Notes:</label>
-                            <textarea value={careNotes} onChange={(e) => setCareNotes(e.target.value)} />
-                        </div>
-                        <button className="save-button" onClick={handleSaveSettings}>Save</button>
+                        <div className="info-row"><label>Phone Number:</label><input type="tel" value={emergencyPhone} onChange={(e) => setEmergencyPhone(e.target.value)} /></div>
+                        <div className="info-row"><label>Care Notes:</label><textarea value={careNotes} onChange={(e) => setCareNotes(e.target.value)} /></div>
                     </div>
                 )}
 
                 {activeSection === 'settings' && (
-                    <div className="app-settings">
-                        <h2>Notification Settings</h2>
+                    <div className="settings-options">
+                        <div className="info-row"><label>Video Quality:</label>
+                            <select value={videoQuality} onChange={(e) => setVideoQuality(e.target.value)}>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
                         <div className="info-row">
-                            <label>Enable Notifications:</label>
-                            <input type="checkbox" checked={notificationsEnabled} onChange={() => setNotificationsEnabled(!notificationsEnabled)} />
+                            <label>Notifications:</label>
+                            <input type="checkbox" checked={notificationsEnabled} onChange={(e) => setNotificationsEnabled(e.target.checked)} />
                         </div>
                         <div className="info-row">
                             <label>Alert Sound:</label>
-                            <input type="checkbox" checked={alertSound} onChange={() => setAlertSound(!alertSound)} />
+                            <input type="checkbox" checked={alertSound} onChange={(e) => setAlertSound(e.target.checked)} />
                         </div>
-                        <div className="info-row">
-                            <label>Fall Detected Alerts:</label>
-                            <input type="checkbox" checked={notificationTypes.fallDetected} onChange={() => setNotificationTypes(prev => ({ ...prev, fallDetected: !prev.fallDetected }))} />
-                        </div>
-                        <div className="info-row">
-                            <label>Camera Offline Alerts:</label>
-                            <input type="checkbox" checked={notificationTypes.cameraOffline} onChange={() => setNotificationTypes(prev => ({ ...prev, cameraOffline: !prev.cameraOffline }))} />
-                        </div>
-
-                        <h2>Date & Time Settings</h2>
                         <div className="info-row">
                             <label>Date Format:</label>
-                            <select value={dateFormat} onChange={(e) => setDateFormat(e.target.value)}>
-                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                                <option value="YYYY/MM/DD">YYYY/MM/DD</option>
-                            </select>
+                            <input type="text" value={dateFormat} onChange={(e) => setDateFormat(e.target.value)} />
                         </div>
                         <div className="info-row">
                             <label>Time Zone:</label>
-                            <select value={timeZone} onChange={(e) => setTimeZone(e.target.value)}>
-                                <option value="GMT">GMT</option>
-                                <option value="UTC">UTC</option>
-                                <option value="Asia/Taipei">Asia/Taipei</option>
-                                <option value="Asia/Bangkok">Asia/Bangkok</option>
-                            </select>
+                            <input type="text" value={timeZone} onChange={(e) => setTimeZone(e.target.value)} />
                         </div>
-  
-
-                        <h2>Account</h2>
-        <div className="info-row">
-            <label>Email:</label>
-            <span>{userEmail || 'N/A'}</span>
-        </div>
-        {/* Add the Current Password field here */}
-        <div className="info-row">
-            <label>Current Password:</label>
-            <input
-                type="password"
-                placeholder="Enter current password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-                  </div>
-                  <div className="info-row">
-                      <label>New Password:</label>
-                      <input
-                          type="password"
-                          placeholder="Enter new password"
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                      />
-                  </div>
-
-                  <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
-              </div>
+                        <div className="info-row">
+                            <label>New Password:</label>
+                            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                        </div>
+                    </div>
                 )}
+
+                <div className="save-button-container">
+                    <button onClick={handleSaveSettings} disabled={saving}>
+                        {saving ? 'Saving...' : 'Save Settings'}
+                    </button>
+                </div>
             </main>
         </div>
     );

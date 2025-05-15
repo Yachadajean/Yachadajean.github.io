@@ -1,76 +1,83 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './LiveStream.css';
-import SizeContainer from './SizeContainer';
 
 const LiveStream = () => {
-    const [fallDetected, setFallDetected] = useState(false);
-    const [error, setError] = useState(null);
-    const [videoLoading, setVideoLoading] = useState(true);
-    const navigate = useNavigate();
+  const [fallDetected, setFallDetected] = useState(false);
+  const [error, setError] = useState(null);
+  const [videoLoading, setVideoLoading] = useState(true);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const checkFallStatus = async () => {
-            try {
-                const res = await fetch('https://api.falldetection.me/status');
-                if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
-                const data = await res.json();
-                setFallDetected(data.status === "Camera online"); // Adjust logic if needed
-                setError(null);
-            } catch (err) {
-                console.error('Error fetching fall status:', err);
-                setError('Failed to fetch fall detection status.');
-            }
-        };
-
-        checkFallStatus();
-        const intervalId = setInterval(checkFallStatus, 3000);
-        return () => clearInterval(intervalId);
-    }, []);
-
-    const handleVideoLoad = () => {
-        setVideoLoading(false);
+  useEffect(() => {
+    const checkFallStatus = async () => {
+      try {
+        const res = await fetch('https://api.falldetection.me/status');
+        if (!res.ok) throw new Error(`Status check failed: ${res.status}`);
+        const data = await res.json();
+        // Update this condition based on your API's actual fall detection status text
+        setFallDetected(data.status === "Fall detected");
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching fall status:', err);
+        setError('Failed to fetch fall detection status.');
+      }
     };
 
-    const goToSettings = () => {
-        navigate('/settings');
-    };
+    checkFallStatus();
+    const intervalId = setInterval(checkFallStatus, 3000);
+    return () => clearInterval(intervalId);
+  }, []);
 
-    return (
-        <div>
-            <div style={{ padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Link to="/buildlayout" className="gallery-button">
-                    📁 View Fall Recordings
-                </Link>
-                <button onClick={goToSettings} className="gallery-button"> {/* Use the same class */}
-                    ⚙️ Settings
-                </button>
-            </div>
+  return (
+    <div className="livestream-container">
+      <div className="top-bar">
+        <button onClick={() => navigate('/buildlayout')} className="nav-button">
+          📁 Recordings
+        </button>
+        <button onClick={() => navigate('/settings')} className="nav-button">
+          ⚙️ Settings
+        </button>
+      </div>
 
-            {error && <div className="error">{error}</div>}
-            {!error && !fallDetected && <div className="status">Waiting for fall detection...</div>}
-            {fallDetected && <div className="status">Fall detected! Please check the camera.</div>}
+      {error && <div className="alert error">{error}</div>}
+      {!error && <div className={`alert ${fallDetected ? 'warning' : 'info'}`}>
+        {fallDetected ? 'Fall detected! Check camera.' : 'Monitoring for falls...'}
+      </div>}
 
-            <SizeContainer>
-                <div style={{ textAlign: 'center' }}>
-                    <div className="container">
-                        <div className={`video-wrapper ${videoLoading ? 'loading' : ''}`}>
-                            {videoLoading ? (
-                                <div className="waiting-message">Waiting for video...</div>
-                            ) : (
-                                <img
-                                    src="https://api.falldetection.me/video_feed"
-                                    alt="Live Stream"
-                                    className="video-frame"
-                                    onLoad={handleVideoLoad}
-                                />
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </SizeContainer>
-        </div>
-    );
+      <div
+        className="video-container"
+        style={{ position: 'relative' }}
+        role="region"
+        aria-label="Live fall detection video feed"
+      >
+        {videoLoading && (
+          <div className="loading-message" style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 10,
+            background: 'rgba(255,255,255,0.8)',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            fontWeight: 'bold',
+          }}>
+            Loading video...
+          </div>
+        )}
+
+        <video
+          className="video-frame"
+          src="https://api.falldetection.me/video_feed"
+          autoPlay
+          muted
+          controls
+          onCanPlay={() => setVideoLoading(false)}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default LiveStream;

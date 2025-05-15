@@ -1,12 +1,14 @@
-/* SizeContainer.css */
 .size-container {
-    max-width: 1200px;  /* Set the maximum width of the container */
-    margin: 0 auto;     /* Center the container horizontally */
-    padding: 20px;      /* Add padding inside the container */
-    box-sizing: border-box; /* Ensure padding doesn't overflow */
-    display: flex;      /* Enable flexbox for better control */
-    justify-content: center; /* Center content horizontally */
-    align-items: center;  /* Center content vertically (if height is defined) */
-    min-height: 100vh;    /* Ensure the container takes full viewport height */
-  }
-  
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 80px;               /* Offset for fixed top bar */
+  box-sizing: border-box;
+  height: calc(100vh - 60px);      /* Adjust height minus header */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;                       /* Adds vertical spacing between elements */
+  transform: translateY(5px);     /* Gently drag the whole content downward */
+}
