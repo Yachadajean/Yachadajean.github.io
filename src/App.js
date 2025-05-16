@@ -16,6 +16,7 @@ import GalleryLayout from './pages/GalleryLayout.js';
 import SizeContainer from './pages/SizeContainer'; 
 import Onboarding from './pages/Onboarding';  
 import BuildLayOut from './pages/BuildLayOut';
+import ForgotPassword from './ForgotPassword';
 
 // Update backend URL for production or development environment
 const BACKEND_URL = window.location.hostname === 'localhost' 
