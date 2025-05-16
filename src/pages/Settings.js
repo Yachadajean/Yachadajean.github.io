@@ -3,7 +3,7 @@ import './Settings.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // fixed import
 
 const timeZoneOptions = [
   { country: 'Australia', tz: 'Australia/Sydney', gmt: 10 },
@@ -19,12 +19,7 @@ const timeZoneOptions = [
   { country: 'Vietnam', tz: 'Asia/Ho_Chi_Minh', gmt: 7 }
 ].sort((a, b) => a.country.localeCompare(b.country));
 
-const dateFormats = [
-  'YYYY-MM-DD',
-  'DD/MM/YYYY',
-  'MM/DD/YYYY'
-];
-
+const dateFormats = ['YYYY-MM-DD', 'DD/MM/YYYY', 'MM/DD/YYYY'];
 const videoQualities = ['low', 'medium', 'high'];
 
 function Settings() {
@@ -41,7 +36,7 @@ function Settings() {
   const [alertSound, setAlertSound] = useState(true);
   const [saving, setSaving] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
-  
+
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
@@ -56,17 +51,6 @@ function Settings() {
     }
   }, []);
 
- useEffect(() => {
-  const browserTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const offset = -new Date().getTimezoneOffset() / 60;
-  const gmtOffset = `GMT${offset >= 0 ? '+' : ''}${offset}`;
-  const locationString = `${browserTZ} (${gmtOffset})`;
-
-  setTimeZone(browserTZ);
-  setCurrentLocation({ tz: browserTZ, gmt: offset });
-}, []);
-
-
   useEffect(() => {
     if (userId && token) {
       fetch('https://api.falldetection.me/api/settings', {
@@ -77,7 +61,20 @@ function Settings() {
         .then(res => res.json())
         .then(data => {
           if (data.date_format) setDateFormat(data.date_format);
-          if (data.time_zone) setTimeZone(data.time_zone);
+
+          if (data.time_zone) {
+            setTimeZone(data.time_zone);
+            // Find matching tz object for GMT offset
+            const loc = timeZoneOptions.find(tz => tz.tz === data.time_zone);
+            setCurrentLocation(loc || { tz: data.time_zone, gmt: 0 });
+          } else {
+            // fallback to browser timezone
+            const browserTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const offset = -new Date().getTimezoneOffset() / 60;
+            setTimeZone(browserTZ);
+            setCurrentLocation({ tz: browserTZ, gmt: offset });
+          }
+
           if (data.video_quality) setVideoQuality(data.video_quality);
           if (data.video_retention !== undefined) setVideoRetention(data.video_retention);
           if (data.alert_enabled !== undefined) setNotificationsEnabled(data.alert_enabled);
@@ -86,6 +83,8 @@ function Settings() {
         .catch(err => console.error("Failed to load settings:", err));
     }
   }, [userId, token]);
+
+  // REMOVED the useEffect that sets timezone blindly on mount
 
   const handleSave = () => {
     if (!token) return;
@@ -125,100 +124,97 @@ function Settings() {
 
   return (
     <div className="layout-container">
-        <aside className="left-side-settings">
+      <aside className="left-side-settings">
         <div className={`sidebar-icon-item ${activeSection === 'settings' ? 'active' : ''}`}
-            onClick={() => setActiveSection('settings')}>
-            <FontAwesomeIcon icon={faCog} />
-            <span>Settings</span>
+          onClick={() => setActiveSection('settings')}>
+          <FontAwesomeIcon icon={faCog} />
+          <span>Settings</span>
         </div>
         <div className="sidebar-icon-item" onClick={handleLogout}>
-            <FontAwesomeIcon icon={faSignOutAlt} />
-            <span>Log Out</span>
+          <FontAwesomeIcon icon={faSignOutAlt} />
+          <span>Log Out</span>
         </div>
-        </aside>
+      </aside>
 
-        <main className="right-side-settings">
+      <main className="right-side-settings">
         <button onClick={() => navigate('/livestream')} className="goback-button">
-            <span className="arrow arrow-left"></span>&nbsp;Go Back
+          <span className="arrow arrow-left"></span>&nbsp;Go Back
         </button>
 
         <h2>Settings</h2>
 
         <div className="settings-options">
-            <div className="info-row">
+          <div className="info-row">
             <label>Date Format:</label>
             <select value={dateFormat} onChange={(e) => setDateFormat(e.target.value)}>
-                {dateFormats.map(format => (
+              {dateFormats.map(format => (
                 <option key={format} value={format}>{format}</option>
-                ))}
+              ))}
             </select>
-            </div>
-            <div className="info-row">
-                <label>Time Zone:</label>
-                <select value={timeZone} onChange={(e) => setTimeZone(e.target.value)}>
-                    {currentLocation && (
-                    <optgroup label="Current Location">
-                        <option value={currentLocation.tz}>
-                        {currentLocation.tz.replace(/_/g, ' ')} (GMT{currentLocation.gmt >= 0 ? '+' : ''}{currentLocation.gmt})
-                        </option>
-                    </optgroup>
-                    )}
-                    <optgroup label="Other Countries">
-                    {timeZoneOptions
-                        .filter(opt => opt.tz !== currentLocation?.tz)
-                        .map(opt => (
-                        <option key={opt.tz} value={opt.tz}>
-                            {opt.country} (GMT{opt.gmt >= 0 ? '+' : ''}{opt.gmt})
-                        </option>
-                        ))}
-                    </optgroup>
-                </select>
-                </div>
-            <div className="info-row">
+          </div>
+          <div className="info-row">
+            <label>Time Zone:</label>
+            <select value={timeZone} onChange={(e) => setTimeZone(e.target.value)}>
+              {currentLocation && (
+                <optgroup label="Current Location">
+                  <option value={currentLocation.tz}>
+                    {currentLocation.tz.replace(/_/g, ' ')} (GMT{currentLocation.gmt >= 0 ? '+' : ''}{currentLocation.gmt})
+                  </option>
+                </optgroup>
+              )}
+              <optgroup label="Other Countries">
+                {timeZoneOptions
+                  .filter(opt => opt.tz !== currentLocation?.tz)
+                  .map(opt => (
+                    <option key={opt.tz} value={opt.tz}>
+                      {opt.country} (GMT{opt.gmt >= 0 ? '+' : ''}{opt.gmt})
+                    </option>
+                  ))}
+              </optgroup>
+            </select>
+          </div>
+          <div className="info-row">
             <label>Video Quality:</label>
             <select value={videoQuality} onChange={(e) => setVideoQuality(e.target.value)}>
-                {videoQualities.map(q => (
+              {videoQualities.map(q => (
                 <option key={q} value={q}>{q.charAt(0).toUpperCase() + q.slice(1)}</option>
-                ))}
+              ))}
             </select>
-            </div>
-            <div className="info-row">
+          </div>
+          <div className="info-row">
             <label>Video Retention (days):</label>
             <select value={videoRetention} onChange={(e) => setVideoRetention(Number(e.target.value))}>
-                {[1, 3, 7, 14, 30, 60, 90].map(days => (
-                    <option key={days} value={days}>
-                    {days} {days === 1 ? 'day' : 'days'}
-                    </option>
-                ))}
-                </select>
-            </div>
-            <div className="info-row">
-                <label>Enable Notifications:</label>
-                <label className="switch">
-                    <input type="checkbox" checked={notificationsEnabled} onChange={(e) => setNotificationsEnabled(e.target.checked)} />
-                    <span className="slider round"></span>
-                </label>
-                </div>
-
-                <div className="info-row">
-                <label>Alert Sound:</label>
-                <label className="switch">
-                    <input type="checkbox" checked={alertSound} onChange={(e) => setAlertSound(e.target.checked)} />
-                    <span className="slider round"></span>
-                </label>
-                </div>
-
+              {[1, 3, 7, 14, 30, 60, 90].map(days => (
+                <option key={days} value={days}>
+                  {days} {days === 1 ? 'day' : 'days'}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="info-row">
+            <label>Enable Notifications:</label>
+            <label className="switch">
+              <input type="checkbox" checked={notificationsEnabled} onChange={(e) => setNotificationsEnabled(e.target.checked)} />
+              <span className="slider round"></span>
+            </label>
+          </div>
+          <div className="info-row">
+            <label>Alert Sound:</label>
+            <label className="switch">
+              <input type="checkbox" checked={alertSound} onChange={(e) => setAlertSound(e.target.checked)} />
+              <span className="slider round"></span>
+            </label>
+          </div>
         </div>
 
         <div className="save-button-container">
-            <button onClick={handleSave} disabled={saving}>
+          <button onClick={handleSave} disabled={saving}>
             {saving ? 'Saving...' : 'Save Settings'}
-            </button>
+          </button>
         </div>
-        </main>
+      </main>
     </div>
-    );
-
+  );
 }
 
 export default Settings;
