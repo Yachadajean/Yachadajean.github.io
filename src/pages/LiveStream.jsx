@@ -71,7 +71,6 @@ const LiveStream = () => {
         )}
 
         <img
-          className="video-frame"
           src="https://api.falldetection.me/video_feed"
           alt="Live fall detection stream"
           onLoad={() => setImgLoading(false)}
