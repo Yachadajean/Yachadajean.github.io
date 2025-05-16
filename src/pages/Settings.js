@@ -161,13 +161,21 @@ function Settings() {
                 </select>
             </div>
             <div className="info-row">
-            <label>Enable Notifications:</label>
-            <input type="checkbox" checked={notificationsEnabled} onChange={(e) => setNotificationsEnabled(e.target.checked)} />
-            </div>
-            <div className="info-row">
-            <label>Alert Sound:</label>
-            <input type="checkbox" checked={alertSound} onChange={(e) => setAlertSound(e.target.checked)} />
-            </div>
+                <label>Enable Notifications:</label>
+                <label className="switch">
+                    <input type="checkbox" checked={notificationsEnabled} onChange={(e) => setNotificationsEnabled(e.target.checked)} />
+                    <span className="slider round"></span>
+                </label>
+                </div>
+
+                <div className="info-row">
+                <label>Alert Sound:</label>
+                <label className="switch">
+                    <input type="checkbox" checked={alertSound} onChange={(e) => setAlertSound(e.target.checked)} />
+                    <span className="slider round"></span>
+                </label>
+                </div>
+
         </div>
 
         <div className="save-button-container">

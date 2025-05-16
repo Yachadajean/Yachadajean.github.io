@@ -67,13 +67,22 @@
     background-color:#688ee0;
   }
   
+  .onboarding-button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
   @media screen and (max-width: 480px) {
     .onboarding-card {
       padding: 30px 20px;
     }
   
     .onboarding-text {
+      text-align: center;
       font-size: 16px;
+      margin-top: 20px;
+      color: #333;
     }
   
     .onboarding-button {
