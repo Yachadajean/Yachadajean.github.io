@@ -16,7 +16,8 @@ import GalleryLayout from './pages/GalleryLayout.js';
 import SizeContainer from './pages/SizeContainer'; 
 import Onboarding from './pages/Onboarding';  
 import BuildLayOut from './pages/BuildLayOut';
-import ForgotPassword from './ForgotPassword';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 // Update backend URL for production or development environment
 const BACKEND_URL = window.location.hostname === 'localhost' 
@@ -86,6 +87,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<CreateAccount />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/gallery" element={<GalleryLayout />} />
