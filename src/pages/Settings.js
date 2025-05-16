@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
+
+const navigate = useNavigate();
 
 const dateFormats = [
   'YYYY-MM-DD',
@@ -106,61 +109,70 @@ function Settings() {
 
   return (
     <div className="layout-container">
-      <aside className="left-side-settings">
+        <aside className="left-side-settings">
         <div className={`sidebar-icon-item ${activeSection === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveSection('settings')}>
-          <FontAwesomeIcon icon={faCog} />
-          <span>Settings</span>
+            onClick={() => setActiveSection('settings')}>
+            <FontAwesomeIcon icon={faCog} />
+            <span>Settings</span>
         </div>
         <div className="sidebar-icon-item" onClick={handleLogout}>
-          <FontAwesomeIcon icon={faSignOutAlt} />
-          <span>Log Out</span>
+            <FontAwesomeIcon icon={faSignOutAlt} />
+            <span>Log Out</span>
         </div>
-      </aside>
-      <main className="right-side-settings">
+        </aside>
+
+        <main className="right-side-settings">
+        {/* 👇 Insert the Go Back button here */}
+        <button onClick={() => navigate('/')} className="goback-button">
+            <span className="arrow arrow-left"></span>&nbsp;Go Back
+        </button>
+
         <h2>Settings</h2>
+
         <div className="settings-options">
-          <div className="info-row">
+            <div className="info-row">
             <label>Date Format:</label>
             <select value={dateFormat} onChange={(e) => setDateFormat(e.target.value)}>
-              {dateFormats.map(format => (
+                {dateFormats.map(format => (
                 <option key={format} value={format}>{format}</option>
-              ))}
+                ))}
             </select>
-          </div>
-          <div className="info-row">
+            </div>
+            <div className="info-row">
             <label>Time Zone:</label>
             <input type="text" value={timeZone} onChange={(e) => setTimeZone(e.target.value)} />
-          </div>
-          <div className="info-row">
+            </div>
+            <div className="info-row">
             <label>Video Quality:</label>
             <select value={videoQuality} onChange={(e) => setVideoQuality(e.target.value)}>
-              {videoQualities.map(q => (
+                {videoQualities.map(q => (
                 <option key={q} value={q}>{q.charAt(0).toUpperCase() + q.slice(1)}</option>
-              ))}
+                ))}
             </select>
-          </div>
-          <div className="info-row">
+            </div>
+            <div className="info-row">
             <label>Video Retention (days):</label>
             <input type="number" value={videoRetention} onChange={(e) => setVideoRetention(Number(e.target.value))} min={1} />
-          </div>
-          <div className="info-row">
+            </div>
+            <div className="info-row">
             <label>Enable Notifications:</label>
             <input type="checkbox" checked={notificationsEnabled} onChange={(e) => setNotificationsEnabled(e.target.checked)} />
-          </div>
-          <div className="info-row">
+            </div>
+            <div className="info-row">
             <label>Alert Sound:</label>
             <input type="checkbox" checked={alertSound} onChange={(e) => setAlertSound(e.target.checked)} />
-          </div>
+            </div>
         </div>
+
         <div className="save-button-container">
-          <button onClick={handleSave} disabled={saving}>
+            <button onClick={handleSave} disabled={saving}>
             {saving ? 'Saving...' : 'Save Settings'}
-          </button>
+            </button>
         </div>
-      </main>
+        </main>
     </div>
-  );
+    );
+
 }
 
 export default Settings;

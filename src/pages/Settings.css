@@ -341,6 +341,39 @@ button {
   text-align: center;
 }
 
+.goback-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.goback-button:hover {
+  background-color: #f0f0f0;
+}
+
+/* arrow styles */
+.arrow {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #000;
+  border-right: 2px solid #000;
+}
+
+.arrow-left {
+  transform: rotate(-135deg);
+}
 /* ============== */
 /* Mobile Responsiveness */
 /* ============== */
