@@ -5,6 +5,21 @@ import { faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
+const timeZoneOptions = [
+  { country: 'Australia', tz: 'Australia/Sydney', gmt: 10 },
+  { country: 'Brazil', tz: 'America/Sao_Paulo', gmt: -3 },
+  { country: 'Canada', tz: 'America/Toronto', gmt: -5 },
+  { country: 'China', tz: 'Asia/Shanghai', gmt: 8 },
+  { country: 'Germany', tz: 'Europe/Berlin', gmt: 1 },
+  { country: 'India', tz: 'Asia/Kolkata', gmt: 5.5 },
+  { country: 'Japan', tz: 'Asia/Tokyo', gmt: 9 },
+  { country: 'South Africa', tz: 'Africa/Johannesburg', gmt: 2 },
+  { country: 'Thailand', tz: 'Asia/Bangkok', gmt: 7 },
+  { country: 'United Kingdom', tz: 'Europe/London', gmt: 0 },
+  { country: 'United States', tz: 'America/New_York', gmt: -5 },
+  { country: 'Vietnam', tz: 'Asia/Ho_Chi_Minh', gmt: 7 }
+].sort((a, b) => a.country.localeCompare(b.country));
+
 const dateFormats = [
   'YYYY-MM-DD',
   'DD/MM/YYYY',
@@ -26,7 +41,8 @@ function Settings() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [alertSound, setAlertSound] = useState(true);
   const [saving, setSaving] = useState(false);
-
+  const [currentLocation, setCurrentLocation] = useState(null);
+  
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
@@ -41,12 +57,16 @@ function Settings() {
     }
   }, []);
 
-  useEffect(() => {
-    const browserTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const offset = -new Date().getTimezoneOffset() / 60;
-    const gmtOffset = `GMT${offset >= 0 ? '+' : ''}${offset}`;
-    setTimeZone(`${browserTZ} (${gmtOffset})`);
-  }, []);
+ useEffect(() => {
+  const browserTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const offset = -new Date().getTimezoneOffset() / 60;
+  const gmtOffset = `GMT${offset >= 0 ? '+' : ''}${offset}`;
+  const locationString = `${browserTZ} (${gmtOffset})`;
+
+  setTimeZone(browserTZ);
+  setCurrentLocation({ tz: browserTZ, gmt: offset });
+}, []);
+
 
   useEffect(() => {
     if (userId && token) {
@@ -136,9 +156,26 @@ function Settings() {
             </select>
             </div>
             <div className="info-row">
-            <label>Time Zone:</label>
-            <input type="text" value={timeZone} onChange={(e) => setTimeZone(e.target.value)} />
-            </div>
+                <label>Time Zone:</label>
+                <select value={timeZone} onChange={(e) => setTimeZone(e.target.value)}>
+                    {currentLocation && (
+                    <optgroup label="Current Location">
+                        <option value={currentLocation.tz}>
+                        {currentLocation.tz.replace(/_/g, ' ')} (GMT{currentLocation.gmt >= 0 ? '+' : ''}{currentLocation.gmt})
+                        </option>
+                    </optgroup>
+                    )}
+                    <optgroup label="Other Countries">
+                    {timeZoneOptions
+                        .filter(opt => opt.tz !== currentLocation?.tz)
+                        .map(opt => (
+                        <option key={opt.tz} value={opt.tz}>
+                            {opt.country} (GMT{opt.gmt >= 0 ? '+' : ''}{opt.gmt})
+                        </option>
+                        ))}
+                    </optgroup>
+                </select>
+                </div>
             <div className="info-row">
             <label>Video Quality:</label>
             <select value={videoQuality} onChange={(e) => setVideoQuality(e.target.value)}>
