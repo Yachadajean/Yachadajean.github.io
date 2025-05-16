@@ -115,7 +115,7 @@ export default function LoginPage() {
           </button>
 
           <p className="signup-link">
-            Don't have an assistant? <Link to="/signup">Sign Up Here</Link>
+            Don't have an account? <Link to="/signup">Sign Up Here</Link>
           </p>
         </form>
       </div>

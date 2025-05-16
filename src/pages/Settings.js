@@ -9,7 +9,6 @@ const timeZoneOptions = [
   { country: 'Australia', tz: 'Australia/Sydney', gmt: 10 },
   { country: 'Brazil', tz: 'America/Sao_Paulo', gmt: -3 },
   { country: 'Canada', tz: 'America/Toronto', gmt: -5 },
-  { country: 'China', tz: 'Asia/Shanghai', gmt: 8 },
   { country: 'Germany', tz: 'Europe/Berlin', gmt: 1 },
   { country: 'India', tz: 'Asia/Kolkata', gmt: 5.5 },
   { country: 'Japan', tz: 'Asia/Tokyo', gmt: 9 },
@@ -139,8 +138,7 @@ function Settings() {
         </aside>
 
         <main className="right-side-settings">
-        {/* 👇 Insert the Go Back button here */}
-        <button onClick={() => navigate('/')} className="goback-button">
+        <button onClick={() => navigate('/livestream')} className="goback-button">
             <span className="arrow arrow-left"></span>&nbsp;Go Back
         </button>
 
