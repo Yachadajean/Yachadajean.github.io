@@ -152,7 +152,13 @@ function Settings() {
             </div>
             <div className="info-row">
             <label>Video Retention (days):</label>
-            <input type="number" value={videoRetention} onChange={(e) => setVideoRetention(Number(e.target.value))} min={1} />
+            <select value={videoRetention} onChange={(e) => setVideoRetention(Number(e.target.value))}>
+                {[1, 3, 7, 14, 30, 60, 90].map(days => (
+                    <option key={days} value={days}>
+                    {days} {days === 1 ? 'day' : 'days'}
+                    </option>
+                ))}
+                </select>
             </div>
             <div className="info-row">
             <label>Enable Notifications:</label>
