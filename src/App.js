@@ -84,6 +84,7 @@ function App() {
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<CreateAccount />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/gallery" element={<GalleryLayout />} />
