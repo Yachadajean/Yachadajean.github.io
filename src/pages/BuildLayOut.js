@@ -46,9 +46,22 @@ export default function BuildLayOut() {
     const dateStr = `${match[1]}-${match[2]}-${match[3]}`; // "YYYY-MM-DD"
     if (!groups[dateStr]) groups[dateStr] = [];
     groups[dateStr].push(file);
+    groups[dateStr].sort((a, b) => {
+    const timeA = a.match(/_(\d{6})\.mp4$/)?.[1];
+    const timeB = b.match(/_(\d{6})\.mp4$/)?.[1];
+    return timeB.localeCompare(timeA); // newest time first
+});
+
   });
-  return groups;
+
+  // Sort keys (dates) in descending order
+  const sortedGroups = Object.fromEntries(
+    Object.entries(groups).sort((a, b) => new Date(b[0]) - new Date(a[0]))
+  );
+
+  return sortedGroups;
 };
+
 
 
   useEffect(() => {

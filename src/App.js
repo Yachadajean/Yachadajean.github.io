@@ -92,8 +92,6 @@ function App() {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/gallery" element={<GalleryLayout />} />
           <Route path="/buildlayout" element={<BuildLayOut />} />
-
-
           <Route path="/ResetPassword" element={<ResetPassword />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/livestream" element={
