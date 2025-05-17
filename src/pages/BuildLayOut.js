@@ -85,7 +85,7 @@ export default function BuildLayOut() {
     <div className="layout-container">
       <div className="left-side">
         <button onClick={() => navigate('/livestream')} className="goback-button">
-          <span className="arrow arrow-left" />&nbsp;
+          &lt; Go Back
         </button>
         <h1>Fall Recordings</h1>
 
