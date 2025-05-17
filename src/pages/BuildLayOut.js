@@ -2,24 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './BuildLayOut.css';
-import VideoPlayer from './components/VideoPlayer';
 import { useNavigate } from 'react-router-dom';
 
 export default function BuildLayOut() {
-  const [selectedVideoUrl, setSelectedVideoUrl] = useState(null);
   const [activeTab, setActiveTab] = useState('Fall Videos');
   const [videos, setVideos] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedAlertVideo, setSelectedAlertVideo] = useState(null);
   const [fallRecordingDates, setFallRecordingDates] = useState(new Set());
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedVideoUrl = localStorage.getItem('selectedVideoUrl');
-    if (savedVideoUrl) setSelectedVideoUrl(savedVideoUrl);
-
     fetch('https://api.falldetection.me/api/recordings')
       .then(res => res.json())
       .then(setVideos)
@@ -31,7 +27,7 @@ export default function BuildLayOut() {
       .catch(console.error);
   }, []);
 
-  const fallVideos = videos.filter(file => file.toLowerCase().includes('fall'));
+  const fallVideos = videos.filter(file => /fall_clip_\d{8}_\d{6}\.mp4/i.test(file));
   const formatDate = date => date?.toISOString().split('T')[0].replace(/-/g, '');
 
   const filteredFallVideos = selectedDate
@@ -42,30 +38,24 @@ export default function BuildLayOut() {
     ? alerts.filter(a => new Date(a.timestamp).toDateString() === selectedDate.toDateString())
     : alerts;
 
-  const groupByDate = fileList => {
-    const groups = {};
-    fileList.forEach(file => {
-      const match = file.match(/(\d{8})_\d{6}/);
-      if (!match) return;
-      const [_, yyyymmdd] = match;
-      const dateStr = `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6, 8)}`;
-      if (!groups[dateStr]) groups[dateStr] = [];
-      groups[dateStr].push(file);
-    });
-    return groups;
-  };
+  const groupByDate = (fileList) => {
+  const groups = {};
+  fileList.forEach(file => {
+    const match = file.match(/fall_clip_(\d{4})(\d{2})(\d{2})_\d{6}/);
+    if (!match) return; // skip files that don't match pattern
+    const dateStr = `${match[1]}-${match[2]}-${match[3]}`; // "YYYY-MM-DD"
+    if (!groups[dateStr]) groups[dateStr] = [];
+    groups[dateStr].push(file);
+  });
+  return groups;
+};
 
-  // Highlight dates with fall recordings on calendar
+
   useEffect(() => {
     const dates = fallVideos.map(file => {
-      const match = file.match(/(\d{8})/);
+      const match = file.match(/(\d{4})(\d{2})(\d{2})_\d{6}/);
       if (!match) return null;
-      const date = match[1];
-      return new Date(
-        parseInt(date.slice(0, 4)),
-        parseInt(date.slice(4, 6)) - 1,
-        parseInt(date.slice(6, 8))
-      ).toDateString();
+      return new Date(match[1], match[2] - 1, match[3]).toDateString();
     }).filter(Boolean);
     setFallRecordingDates(new Set(dates));
   }, [fallVideos]);
@@ -77,8 +67,6 @@ export default function BuildLayOut() {
 
   const handleVideoSelect = (file) => {
     setSelectedVideo(file);
-    setSelectedVideoUrl(`https://api.falldetection.me/recordings/${file}`);
-    localStorage.setItem('selectedVideoUrl', `https://api.falldetection.me/recordings/${file}`);
   };
 
   return (
@@ -94,34 +82,39 @@ export default function BuildLayOut() {
             <button
               key={tab}
               className={activeTab === tab ? 'active' : ''}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => {
+                setActiveTab(tab);
+                setSelectedVideo(null);
+                setSelectedAlertVideo(null);
+              }}
             >
               {tab}
             </button>
           ))}
         </div>
-
-        {selectedVideoUrl && <VideoPlayer videoUrl={selectedVideoUrl} />}
       </div>
 
       <main className="right-side">
         {activeTab === 'Fall Videos' && (
-          <div className="video-gallery two-column">
-            <div className="video-player-half">
-              {selectedVideo ? (
-                <video controls className="main-video-fit">
-                  <source src={`https://api.falldetection.me/recordings/${selectedVideo}`} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <div className="placeholder">
-                  <p>Select a video to view</p>
-                </div>
-              )}
-            </div>
+          <div className="video-gallery single-column">
+            {selectedVideo ? (
+              <video controls className="main-video-fit">
+                <source src={`https://api.falldetection.me/recordings/${selectedVideo}`} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <div className="placeholder">
+                <p>Select a video to view</p>
+              </div>
+            )}
 
-            <div className="video-list-half">
-              {Object.entries(groupByDate(filteredFallVideos)).map(([date, files]) => (
+            <div className="video-list-full">
+            {filteredFallVideos.length === 0 ? (
+              <p className="no-videos-found">
+                No fall videos found{selectedDate ? ` for ${selectedDate.toDateString()}` : ''}.
+              </p>
+            ) : (
+              Object.entries(groupByDate(filteredFallVideos)).map(([date, files]) => (
                 <div key={date}>
                   <h3>{date}</h3>
                   <div className="video-thumbnails">
@@ -133,8 +126,9 @@ export default function BuildLayOut() {
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
+              ))
+            )}
+          </div>
           </div>
         )}
 
@@ -156,7 +150,7 @@ export default function BuildLayOut() {
                   {filteredAlerts.map((alert, idx) => {
                     const fileName = alert.videoFile;
                     return (
-                      <div key={idx} className="alert-item" onClick={() => fileName && handleVideoSelect(fileName)}>
+                      <div key={idx} className="alert-item" onClick={() => fileName && setSelectedAlertVideo(fileName)}>
                         <input type="checkbox" checked={false} readOnly />
                         <div className="alert-details">
                           <span className="alert-time">
@@ -173,11 +167,11 @@ export default function BuildLayOut() {
                 </div>
               )}
 
-              {selectedVideo && (
+              {selectedAlertVideo && (
                 <div className="video-modal">
-                  <button className="close-button" onClick={() => setSelectedVideo(null)}>✕</button>
+                  <button className="close-button" onClick={() => setSelectedAlertVideo(null)}>✕</button>
                   <video controls className="modal-video">
-                    <source src={`https://api.falldetection.me/recordings/${selectedVideo}`} type="video/mp4" />
+                    <source src={`https://api.falldetection.me/recordings/${selectedAlertVideo}`} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>
