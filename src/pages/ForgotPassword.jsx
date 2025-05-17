@@ -39,7 +39,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="forgot-password-page">
-      <h2>Forgot Password</h2>
+      <h2>Forgot Password?</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -55,6 +55,9 @@ const ForgotPassword = () => {
       </form>
 
       {message && <p>{message}</p>}
+      <div className="back-link" onClick={() => navigate('/login')}>
+        <span >Back to Login</span>
+      </div>
     </div>
   );
 };
