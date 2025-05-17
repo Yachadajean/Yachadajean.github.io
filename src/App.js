@@ -82,7 +82,7 @@ function App() {
     <>
       <Router>
         <Routes>
-         <Route path="/" element={<LiveStream />} />
+         <Route path="/" element={<Onboarding />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<CreateAccount />} />
