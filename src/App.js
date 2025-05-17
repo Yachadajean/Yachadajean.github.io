@@ -82,7 +82,7 @@ function App() {
     <>
       <Router>
         <Routes>
-         <Route path="/" element={<Onboarding />} />
+         <Route path="/" element={<BuildLayOut />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<CreateAccount />} />
@@ -92,6 +92,10 @@ function App() {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/gallery" element={<GalleryLayout />} />
           <Route path="/buildlayout" element={<BuildLayOut />} />
+
+
+          <Route path="/ResetPassword" element={<ResetPassword />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/livestream" element={
             <SizeContainer>
               <LiveStream />

@@ -46,7 +46,10 @@ const ResetPassword = () => {
     } catch (err) {
       setMessage('❌ Something went wrong. Please try again.');
       setIsError(true);
-    } finally {
+    } 
+    
+    
+    finally {
       setIsLoading(false);
     }
   };
