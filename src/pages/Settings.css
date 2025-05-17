@@ -40,42 +40,31 @@ body {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: #fff;
-  border: 1px solid var(--border-color);
-  padding: 8px 12px;
+  color: #ffffff ;
+  background-color: #5B86E5;
+  border: 1px solid #4d7adb;
+  padding: 5px 10px;
   cursor: pointer;
   font-size: 14px;
-  border-radius: 6px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: var(--shadow-light);
-  transition: var(--transition);
-  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
 }
 
 .goback-button:hover {
-  background-color: #f0f0f0;
-  transform: scale(1.05);
+  background-color: #ffffff;
+  color: #5B86E5;
 }
 
-.arrow {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-top: 2px solid #000;
-  border-right: 2px solid #000;
-}
-
-.arrow-left {
-  transform: rotate(-135deg);
-}
 
 /* ============== */
 /* Sidebar */
 /* ============== */
 .left-side-settings {
-  width: 95px;
+  width: 100px;
   background-color: #5B86E5;
   font-size: 14px;
   border-radius: 0 10px 10px 0;
@@ -94,8 +83,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  margin-bottom: 5px;
+  padding: 25px;
+  margin-top: 20px;
   cursor: pointer;
   color: var(--text-light);
   transition: var(--transition);
@@ -387,39 +376,7 @@ button {
   text-align: center;
 }
 
-.goback-button {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease;
-}
 
-.goback-button:hover {
-  background-color: #f0f0f0;
-}
-
-/* arrow styles */
-.arrow {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-top: 2px solid #000;
-  border-right: 2px solid #000;
-}
-
-.arrow-left {
-  transform: rotate(-135deg);
-}
 /* ============== */
 /* Mobile Responsiveness */
 /* ============== */
