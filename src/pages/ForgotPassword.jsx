@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ForgotPassword.css';
-
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +22,13 @@ const ForgotPassword = () => {
       });
 
       const data = await res.json();
-      setMessage(data.message || 'Check your email for instructions.');
+
+      if (res.ok && data.token) {
+        // Redirect to reset-password page with token
+        navigate(`/reset-password?token=${data.token}`);
+      } else {
+        setMessage(data.error || 'Something went wrong.');
+      }
     } catch (err) {
       console.error(err);
       setMessage('Something went wrong. Please try again later.');
@@ -43,7 +50,7 @@ const ForgotPassword = () => {
         />
 
         <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Sending...' : 'Send Reset Link'}
+          {isLoading ? 'Checking...' : 'Continue'}
         </button>
       </form>
 

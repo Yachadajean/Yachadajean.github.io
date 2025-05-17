@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import './ResetPassword.css'; // Optional: include your styling
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
+  const navigate = useNavigate(); // 👈 for programmatic navigation
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false); // 👈 track success
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +38,7 @@ const ResetPassword = () => {
 
       if (res.ok) {
         setMessage('✅ Password reset successfully! You can now log in.');
+        setResetSuccess(true); // 👈 show the homepage button
       } else {
         setMessage(data.error || '❌ Failed to reset password.');
         setIsError(true);
@@ -82,6 +85,12 @@ const ResetPassword = () => {
         <p className={isError ? 'error-message' : 'success-message'}>
           {message}
         </p>
+      )}
+
+      {resetSuccess && (
+        <button onClick={() => navigate('/login')} style={{ marginTop: '1rem' }}>
+          ⬅️ Go to Homepage
+        </button>
       )}
     </div>
   );
