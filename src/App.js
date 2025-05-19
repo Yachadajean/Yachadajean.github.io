@@ -12,7 +12,6 @@ import CreateAccount from './pages/CreateAccount';
 import LiveStream from './pages/LiveStream';
 import Settings from './pages/Settings';
 import Calendar from './pages/Calendar';
-import GalleryLayout from './pages/GalleryLayout.js';
 import SizeContainer from './pages/SizeContainer'; 
 import Onboarding from './pages/Onboarding';  
 import BuildLayOut from './pages/BuildLayOut';
@@ -90,7 +89,6 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/calendar" element={<Calendar />} />
-          <Route path="/gallery" element={<GalleryLayout />} />
           <Route path="/buildlayout" element={<BuildLayOut />} />
           <Route path="/ResetPassword" element={<ResetPassword />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
